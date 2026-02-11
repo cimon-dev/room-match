@@ -1,0 +1,169 @@
+html,
+body,
+#__next {
+    height: 100%;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Minimal helpers from your demo */
+.gradient-mint {
+    background: linear-gradient(135deg, #00CBA9 0%, #4A90E2 100%);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00CBA9 0%, #4A90E2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00CBA9 0%, #00B89C 100%);
+}
+
+/* Animations and helpers (from original demo) */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes carouselSlide {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-slideIn {
+    animation: slideIn 0.4s ease-out forwards;
+}
+
+.animate-pulse-gentle {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.carousel-track {
+    animation: carouselSlide 30s linear infinite;
+}
+
+.carousel-track:hover {
+    animation-play-state: paused;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 203, 169, 0.15);
+}
+
+.filter-chip {
+    transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+    transform: scale(1.02);
+}
+
+.filter-chip.active {
+    background: linear-gradient(135deg, #00CBA9 0%, #4A90E2 100%);
+    color: white;
+}
+
+.message-bubble-sent {
+    background: linear-gradient(135deg, #00CBA9 0%, #00B89C 100%);
+}
+
+.message-bubble-received {
+    background: #f1f5f9;
+}
+
+.online-indicator {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+.stagger-4 {
+    animation-delay: 0.4s;
+}
+
+.stagger-5 {
+    animation-delay: 0.5s;
+}
+
+/* multi-line clamp helper */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

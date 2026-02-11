@@ -1,0 +1,1612 @@
+<!doctype html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomMatch Hanoi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <script src="/_sdk/data_sdk.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #00CBA9 #f1f5f9;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00CBA9;
+            border-radius: 3px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes carouselSlide {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-slideIn {
+            animation: slideIn 0.4s ease-out forwards;
+        }
+
+        .animate-pulse-gentle {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .carousel-track {
+            animation: carouselSlide 30s linear infinite;
+        }
+
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+
+        .gradient-mint {
+            background: linear-gradient(135deg, #00CBA9 0%, #4A90E2 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #00CBA9 0%, #4A90E2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 203, 169, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00CBA9 0%, #00B89C 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00B89C 0%, #009E87 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 203, 169, 0.3);
+        }
+
+        .filter-chip {
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip:hover {
+            transform: scale(1.02);
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, #00CBA9 0%, #4A90E2 100%);
+            color: white;
+        }
+
+        .compatibility-ring {
+            background: conic-gradient(#00CBA9 var(--percent), #e2e8f0 var(--percent));
+        }
+
+        .message-bubble-sent {
+            background: linear-gradient(135deg, #00CBA9 0%, #00B89C 100%);
+        }
+
+        .message-bubble-received {
+            background: #f1f5f9;
+        }
+
+        .online-indicator {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.5s;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mint: {
+                            50: '#EDFCF9',
+                            100: '#D1F7EF',
+                            200: '#A7EFE0',
+                            300: '#6FE2CC',
+                            400: '#38CDB3',
+                            500: '#00CBA9',
+                            600: '#00A88C',
+                            700: '#008571',
+                            800: '#006A5B',
+                            900: '#00574B'
+                        },
+                        sky: {
+                            400: '#60A5FA',
+                            500: '#4A90E2',
+                            600: '#3B82F6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @view-transition {
+            navigation: auto;
+        }
+    </style>
+</head>
+
+<body class="h-full bg-slate-50">
+    <div id="app" class="h-full w-full overflow-auto"><!-- Navigation -->
+        <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('landing')">
+                        <div class="w-10 h-10 gradient-mint rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </div><span class="text-xl font-bold gradient-text">RoomMatch</span>
+                    </div>
+                    <div class="hidden md:flex items-center gap-8"><button onclick="navigateTo('landing')"
+                            class="text-slate-600 hover:text-mint-500 font-medium transition-colors">Home</button>
+                        <button onclick="navigateTo('discover')"
+                            class="text-slate-600 hover:text-mint-500 font-medium transition-colors">Discover</button>
+                        <button onclick="navigateTo('messages')"
+                            class="text-slate-600 hover:text-mint-500 font-medium transition-colors relative"> Messages
+                            <span id="unread-badge"
+                                class="hidden absolute -top-1 -right-3 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-3"><button onclick="openUserProfile(currentUserId)"
+                            class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-100 transition-colors">
+                            <div
+                                class="w-8 h-8 rounded-full gradient-mint flex items-center justify-center text-white font-semibold text-sm">
+                                ME
+                            </div><span class="hidden sm:block text-slate-700 font-medium">My Profile</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav><!-- Landing Page -->
+        <div id="landing-page" class="pt-16"><!-- Hero Section -->
+            <section class="relative overflow-hidden bg-gradient-to-br from-white via-mint-50 to-sky-50 py-20 lg:py-32">
+                <div class="absolute inset-0 overflow-hidden">
+                    <div
+                        class="absolute -top-40 -right-40 w-80 h-80 bg-mint-200 rounded-full opacity-30 blur-3xl animate-float">
+                    </div>
+                    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-sky-200 rounded-full opacity-30 blur-3xl animate-float"
+                        style="animation-delay: 1s;"></div>
+                </div>
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="animate-fadeInUp">
+                            <div
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-mint-100 rounded-full text-mint-700 font-medium text-sm mb-6">
+                                <span class="w-2 h-2 bg-mint-500 rounded-full animate-pulse"></span> Trusted by 10,000+
+                                Hanoians
+                            </div>
+                            <h1 id="hero-title"
+                                class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+                                Find Your <span class="gradient-text">Perfect</span> Roommate in Hanoi</h1>
+                            <p id="hero-subtitle" class="text-lg md:text-xl text-slate-600 mb-8 max-w-lg">Smart matching
+                                based on lifestyle compatibility. Verified reviews. Real connections. Your ideal living
+                                situation is just a click away.</p><!-- Search Bar -->
+                            <div class="bg-white rounded-2xl shadow-xl p-4 md:p-6 max-w-xl">
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    <div class="relative"><label
+                                            class="block text-xs font-semibold text-slate-500 mb-2">DISTRICT</label>
+                                        <select id="hero-district"
+                                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-mint-500 focus:border-transparent transition-all">
+                                            <option value="">All Districts</option>
+                                        </select>
+                                    </div>
+                                    <div class="relative"><label
+                                            class="block text-xs font-semibold text-slate-500 mb-2">BUDGET</label>
+                                        <select id="hero-budget"
+                                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-mint-500 focus:border-transparent transition-all">
+                                            <option value="">Any Budget</option>
+                                            <option value="0-3">Under 3M VND</option>
+                                            <option value="3-5">3M - 5M VND</option>
+                                            <option value="5-7">5M - 7M VND</option>
+                                            <option value="7-10">7M - 10M VND</option>
+                                            <option value="10+">Above 10M VND</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex items-end"><button onclick="searchFromHero()"
+                                            class="w-full btn-primary text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                            </svg> Search </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- Hero Illustration -->
+                        <div class="hidden lg:block animate-fadeInUp stagger-2">
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-0 gradient-mint rounded-3xl opacity-10 blur-2xl transform rotate-6">
+                                </div>
+                                <div
+                                    class="relative bg-white rounded-3xl shadow-2xl p-8 transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+                                    <div class="flex items-center gap-4 mb-6">
+                                        <div
+                                            class="w-16 h-16 rounded-2xl gradient-mint flex items-center justify-center text-white text-2xl">
+                                            👥
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-slate-900">Perfect Match Found!</h3>
+                                            <p class="text-slate-500 text-sm">98% Compatibility</p>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-mint-100 flex items-center justify-center text-mint-600">
+                                                ✓
+                                            </div><span class="text-slate-600">Same sleep schedule</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-mint-100 flex items-center justify-center text-mint-600">
+                                                ✓
+                                            </div><span class="text-slate-600">Both love cooking</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-mint-100 flex items-center justify-center text-mint-600">
+                                                ✓
+                                            </div><span class="text-slate-600">Pet-friendly</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- Top Rated Carousel -->
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">🌟 Top Rated Roommates</h2>
+                            <p class="text-slate-600">Highly recommended by previous roommates</p>
+                        </div><button onclick="navigateTo('discover')"
+                            class="text-mint-500 hover:text-mint-600 font-semibold flex items-center gap-1"> View All
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg></button>
+                    </div>
+                </div>
+                <div class="overflow-hidden">
+                    <div id="carousel-track" class="flex gap-6 carousel-track" style="width: max-content;">
+                        <!-- Carousel cards will be inserted here -->
+                    </div>
+                </div>
+            </section><!-- How It Works -->
+            <section class="py-20 bg-gradient-to-b from-slate-50 to-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">How RoomMatch Works</h2>
+                        <p class="text-lg text-slate-600 max-w-2xl mx-auto">Finding your ideal roommate is as easy as
+                            1-2-3</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="text-center animate-fadeInUp stagger-1">
+                            <div
+                                class="w-20 h-20 mx-auto mb-6 gradient-mint rounded-2xl flex items-center justify-center text-4xl shadow-lg shadow-mint-500/30">
+                                🔍
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">1. Smart Filter</h3>
+                            <p class="text-slate-600">Use our lifestyle filters to find roommates who match your habits,
+                                budget, and location preferences.</p>
+                        </div>
+                        <div class="text-center animate-fadeInUp stagger-2">
+                            <div
+                                class="w-20 h-20 mx-auto mb-6 gradient-mint rounded-2xl flex items-center justify-center text-4xl shadow-lg shadow-mint-500/30">
+                                💫
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">2. Match &amp; Connect</h3>
+                            <p class="text-slate-600">Send interest requests, get matched, and start chatting with
+                                potential roommates securely.</p>
+                        </div>
+                        <div class="text-center animate-fadeInUp stagger-3">
+                            <div
+                                class="w-20 h-20 mx-auto mb-6 gradient-mint rounded-2xl flex items-center justify-center text-4xl shadow-lg shadow-mint-500/30">
+                                🏠
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">3. Move In Happy</h3>
+                            <p class="text-slate-600">Finalize your roommate agreement and enjoy a harmonious living
+                                experience with verified reviews.</p>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- Stats Section -->
+            <section class="py-16 gradient-mint">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+                        <div>
+                            <div class="text-4xl md:text-5xl font-bold mb-2">
+                                10K+
+                            </div>
+                            <div class="text-mint-100">
+                                Active Users
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-4xl md:text-5xl font-bold mb-2">
+                                5K+
+                            </div>
+                            <div class="text-mint-100">
+                                Successful Matches
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-4xl md:text-5xl font-bold mb-2">
+                                12
+                            </div>
+                            <div class="text-mint-100">
+                                Hanoi Districts
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-4xl md:text-5xl font-bold mb-2">
+                                4.8⭐
+                            </div>
+                            <div class="text-mint-100">
+                                Average Rating
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- Footer -->
+            <footer class="bg-slate-900 text-white py-12">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="flex items-center gap-2">
+                            <div class="w-10 h-10 gradient-mint rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </div><span class="text-xl font-bold">RoomMatch Hanoi</span>
+                        </div>
+                        <div class="text-slate-400 text-sm">
+                            © 2024 RoomMatch. Made with 💚 for Hanoians
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div><!-- Discover Page -->
+        <div id="discover-page" class="hidden pt-16 h-full">
+            <div class="flex h-full" style="height: calc(100% - 64px);"><!-- Sidebar Filters -->
+                <aside id="filter-sidebar"
+                    class="w-80 bg-white border-r border-slate-200 overflow-y-auto flex-shrink-0 hidden lg:block">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-bold text-slate-900">Filters</h2><button onclick="resetFilters()"
+                                class="text-sm text-mint-500 hover:text-mint-600 font-medium">Reset All</button>
+                        </div><!-- Results Count -->
+                        <div class="bg-mint-50 rounded-xl p-4 mb-6">
+                            <div class="flex items-center gap-2"><span class="text-3xl font-bold text-mint-600"
+                                    id="results-count">36</span> <span class="text-slate-600">matches found</span>
+                            </div>
+                        </div><!-- District Filter -->
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                                <span>📍</span> Districts</h3>
+                            <div id="district-filters" class="space-y-2 max-h-48 overflow-y-auto">
+                                <!-- Districts will be inserted here -->
+                            </div>
+                        </div><!-- Budget Filter -->
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                                <span>💰</span> Budget Range</h3>
+                            <div id="budget-filters" class="space-y-2"><label
+                                    class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <input type="radio" name="budget" value=""
+                                        class="w-4 h-4 text-mint-500 focus:ring-mint-500" checked
+                                        onchange="applyFilters()"> <span class="text-slate-600">Any Budget</span>
+                                </label> <label
+                                    class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <input type="radio" name="budget" value="0-3"
+                                        class="w-4 h-4 text-mint-500 focus:ring-mint-500" onchange="applyFilters()">
+                                    <span class="text-slate-600">Under 3M VND</span> </label> <label
+                                    class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <input type="radio" name="budget" value="3-5"
+                                        class="w-4 h-4 text-mint-500 focus:ring-mint-500" onchange="applyFilters()">
+                                    <span class="text-slate-600">3M - 5M VND</span> </label> <label
+                                    class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <input type="radio" name="budget" value="5-7"
+                                        class="w-4 h-4 text-mint-500 focus:ring-mint-500" onchange="applyFilters()">
+                                    <span class="text-slate-600">5M - 7M VND</span> </label> <label
+                                    class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <input type="radio" name="budget" value="7-10"
+                                        class="w-4 h-4 text-mint-500 focus:ring-mint-500" onchange="applyFilters()">
+                                    <span class="text-slate-600">7M - 10M VND</span> </label> <label
+                                    class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <input type="radio" name="budget" value="10+"
+                                        class="w-4 h-4 text-mint-500 focus:ring-mint-500" onchange="applyFilters()">
+                                    <span class="text-slate-600">Above 10M VND</span> </label>
+                            </div>
+                        </div><!-- Lifestyle Filters -->
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                                <span>🌙</span> Sleep Schedule</h3>
+                            <div class="flex flex-wrap gap-2"><button onclick="toggleFilter('sleep', 'early')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="sleep-early"> 🌅 Early Bird </button> <button
+                                    onclick="toggleFilter('sleep', 'night')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="sleep-night"> 🦉 Night Owl </button>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                                <span>👥</span> Social Style</h3>
+                            <div class="flex flex-wrap gap-2"><button onclick="toggleFilter('social', 'introvert')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="social-introvert"> 🤫 Introvert </button> <button
+                                    onclick="toggleFilter('social', 'extrovert')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="social-extrovert"> 🎉 Extrovert </button>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                                <span>🧹</span> Cleanliness</h3>
+                            <div class="flex flex-wrap gap-2"><button onclick="toggleFilter('clean', 'neat')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="clean-neat"> ✨ Super Neat </button> <button
+                                    onclick="toggleFilter('clean', 'casual')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="clean-casual"> 😌 Casual </button>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                                <span>🐾</span> Pet Policy</h3>
+                            <div class="flex flex-wrap gap-2"><button onclick="toggleFilter('pets', 'has')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="pets-has"> 🐕 Has Pet </button> <button
+                                    onclick="toggleFilter('pets', 'friendly')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="pets-friendly"> 💕 Pet Friendly </button> <button
+                                    onclick="toggleFilter('pets', 'no')"
+                                    class="filter-chip px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-medium"
+                                    data-filter="pets-no"> 🚫 No Pets </button>
+                            </div>
+                        </div>
+                    </div>
+                </aside><!-- Mobile Filter Toggle --> <button id="mobile-filter-btn"
+                    class="lg:hidden fixed bottom-6 left-6 z-40 bg-mint-500 text-white p-4 rounded-full shadow-lg"
+                    onclick="toggleMobileFilters()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg></button> <!-- Main Content -->
+                <main class="flex-1 overflow-y-auto bg-slate-50 p-6"><!-- Sort & View Options -->
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-2"><span class="text-slate-600">Sort by:</span> <select
+                                id="sort-select"
+                                class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-mint-500"
+                                onchange="applyFilters()">
+                                <option value="compatibility">Compatibility</option>
+                                <option value="rating">Highest Rated</option>
+                                <option value="budget-low">Budget: Low to High</option>
+                                <option value="budget-high">Budget: High to Low</option>
+                            </select>
+                        </div>
+                        <div class="text-slate-500 text-sm">
+                            Showing <span id="showing-count" class="font-semibold text-mint-600">36</span> roommates
+                        </div>
+                    </div><!-- Profile Grid -->
+                    <div id="profiles-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <!-- Profile cards will be inserted here -->
+                    </div>
+                </main>
+            </div>
+        </div><!-- Profile Detail Modal -->
+        <div id="profile-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+            <div class="min-h-screen px-4 flex items-center justify-center">
+                <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProfileModal()"></div>
+                <div
+                    class="relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90%] overflow-y-auto animate-fadeInUp">
+                    <div id="profile-modal-content"><!-- Content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div><!-- Messages Page -->
+        <div id="messages-page" class="hidden pt-16 h-full">
+            <div class="flex h-full" style="height: calc(100% - 64px);"><!-- Chat List -->
+                <aside class="w-80 bg-white border-r border-slate-200 overflow-y-auto flex-shrink-0 hidden md:block">
+                    <div class="p-4 border-b border-slate-200">
+                        <h2 class="text-lg font-bold text-slate-900">Messages</h2>
+                    </div>
+                    <div id="chat-list" class="divide-y divide-slate-100"><!-- Chat items will be inserted here -->
+                    </div>
+                </aside><!-- Chat Window -->
+                <main class="flex-1 flex flex-col bg-slate-50">
+                    <div id="chat-window" class="flex-1 flex flex-col"><!-- Chat header -->
+                        <div id="chat-header"
+                            class="bg-white border-b border-slate-200 p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div id="chat-avatar"
+                                    class="w-10 h-10 rounded-full gradient-mint flex items-center justify-center text-white font-semibold">
+                                </div>
+                                <div>
+                                    <h3 id="chat-name" class="font-semibold text-slate-900"></h3>
+                                    <p id="chat-status" class="text-sm text-green-500 flex items-center gap-1"><span
+                                            class="w-2 h-2 bg-green-500 rounded-full online-indicator"></span> Online
+                                    </p>
+                                </div>
+                            </div><button onclick="openUserProfile(activeChatUserId)"
+                                class="text-mint-500 hover:text-mint-600 font-medium text-sm">View Profile</button>
+                        </div><!-- Compatibility Summary Sidebar -->
+                        <div class="flex flex-1 overflow-hidden">
+                            <div class="flex-1 flex flex-col"><!-- Messages -->
+                                <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+                                    <!-- Messages will be inserted here -->
+                                </div><!-- Message Input -->
+                                <div class="bg-white border-t border-slate-200 p-4">
+                                    <div class="flex gap-3"><input type="text" id="message-input"
+                                            placeholder="Type a message..."
+                                            class="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-mint-500"
+                                            onkeypress="handleMessageKeypress(event)"> <button onclick="sendMessage()"
+                                            class="btn-primary text-white px-6 py-3 rounded-xl font-semibold"> Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </div><!-- Compatibility Sidebar -->
+                            <aside id="compatibility-sidebar"
+                                class="w-72 bg-white border-l border-slate-200 overflow-y-auto hidden lg:block">
+                                <div class="p-4">
+                                    <h3 class="font-bold text-slate-900 mb-4">Compatibility</h3>
+                                    <div id="compatibility-details" class="space-y-4">
+                                        <!-- Compatibility items will be inserted here -->
+                                    </div><!-- Roommate Agreement -->
+                                    <div class="mt-6 pt-6 border-t border-slate-200">
+                                        <h4 class="font-semibold text-slate-900 mb-3">📋 Roommate Agreement</h4>
+                                        <div class="space-y-2 text-sm"><label
+                                                class="flex items-center gap-2 cursor-pointer"> <input type="checkbox"
+                                                    class="w-4 h-4 text-mint-500 rounded focus:ring-mint-500"> <span
+                                                    class="text-slate-600">Rent payment date agreed</span> </label>
+                                            <label class="flex items-center gap-2 cursor-pointer"> <input
+                                                    type="checkbox"
+                                                    class="w-4 h-4 text-mint-500 rounded focus:ring-mint-500"> <span
+                                                    class="text-slate-600">Cleaning schedule set</span> </label> <label
+                                                class="flex items-center gap-2 cursor-pointer"> <input type="checkbox"
+                                                    class="w-4 h-4 text-mint-500 rounded focus:ring-mint-500"> <span
+                                                    class="text-slate-600">Guest policy discussed</span> </label> <label
+                                                class="flex items-center gap-2 cursor-pointer"> <input type="checkbox"
+                                                    class="w-4 h-4 text-mint-500 rounded focus:ring-mint-500"> <span
+                                                    class="text-slate-600">Quiet hours agreed</span> </label> <label
+                                                class="flex items-center gap-2 cursor-pointer"> <input type="checkbox"
+                                                    class="w-4 h-4 text-mint-500 rounded focus:ring-mint-500"> <span
+                                                    class="text-slate-600">Utility bill splitting</span> </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aside>
+                        </div>
+                    </div><!-- Empty State -->
+                    <div id="chat-empty-state" class="hidden flex-1 flex items-center justify-center">
+                        <div class="text-center">
+                            <div
+                                class="w-24 h-24 mx-auto mb-6 bg-mint-100 rounded-full flex items-center justify-center text-5xl">
+                                💬
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">No conversation selected</h3>
+                            <p class="text-slate-600">Choose a chat from the sidebar to start messaging</p>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div><!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+            <div class="bg-slate-900 text-white px-6 py-4 rounded-xl shadow-lg flex items-center gap-3 animate-slideIn">
+                <span id="toast-icon">✓</span> <span id="toast-message">Action completed</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ============================================
+        // CONFIGURATION & DATA
+        // ============================================
+
+        const defaultConfig = {
+            hero_title: 'Find Your Perfect Roommate in Hanoi',
+            hero_subtitle: 'Smart matching based on lifestyle compatibility. Verified reviews. Real connections. Your ideal living situation is just a click away.',
+            background_color: '#f8fafc',
+            surface_color: '#ffffff',
+            text_color: '#1e293b',
+            primary_action_color: '#00CBA9',
+            secondary_action_color: '#4A90E2',
+            font_family: 'Plus Jakarta Sans',
+            font_size: 16
+        };
+
+        let config = { ...defaultConfig };
+        let matchRequests = [];
+        let messages = [];
+
+        // Hanoi Districts
+        const districts = [
+            { id: 'ba-dinh', name: 'Ba Đình', emoji: '🏛️' },
+            { id: 'hoan-kiem', name: 'Hoàn Kiếm', emoji: '🏯' },
+            { id: 'hai-ba-trung', name: 'Hai Bà Trưng', emoji: '🏬' },
+            { id: 'dong-da', name: 'Đống Đa', emoji: '📚' },
+            { id: 'cau-giay', name: 'Cầu Giấy', emoji: '🎓' },
+            { id: 'thanh-xuan', name: 'Thanh Xuân', emoji: '🌆' },
+            { id: 'hoang-mai', name: 'Hoàng Mai', emoji: '🏘️' },
+            { id: 'long-bien', name: 'Long Biên', emoji: '🌉' },
+            { id: 'tay-ho', name: 'Tây Hồ', emoji: '🌅' },
+            { id: 'bac-tu-liem', name: 'Bắc Từ Liêm', emoji: '🏗️' },
+            { id: 'nam-tu-liem', name: 'Nam Từ Liêm', emoji: '🏢' },
+            { id: 'ha-dong', name: 'Hà Đông', emoji: '🚇' }
+        ];
+
+        // Generate 36 user profiles (3 per district)
+        const avatarEmojis = ['👩‍💼', '👨‍💻', '👩‍🎓', '👨‍🎨', '👩‍⚕️', '👨‍🍳', '👩‍🔬', '👨‍✈️', '👩‍🏫', '👨‍🔧', '👩‍💻', '👨‍🎓'];
+        const firstNames = ['Minh', 'Linh', 'Hương', 'Đức', 'Trang', 'Nam', 'Phương', 'Tuấn', 'Ngọc', 'Hải', 'Mai', 'Long', 'Thảo', 'Khoa', 'Yến', 'Bình', 'Lan', 'Quang', 'Hà', 'Việt', 'Anh', 'Dũng', 'Chi', 'Hoàng', 'Nga', 'Thành', 'Uyên', 'Phúc', 'Thùy', 'Khánh', 'Nhung', 'Trung', 'Ly', 'Đạt', 'Hạnh', 'Cường'];
+        const jobs = ['Software Engineer', 'Marketing Specialist', 'University Student', 'Graphic Designer', 'Teacher', 'Freelancer', 'Accountant', 'Nurse', 'Content Creator', 'Business Analyst', 'Sales Executive', 'Architect'];
+
+        const users = [];
+        let userId = 1;
+
+        districts.forEach((district, dIndex) => {
+            for (let i = 0; i < 3; i++) {
+                const sleep = Math.random() > 0.5 ? 'early' : 'night';
+                const social = Math.random() > 0.5 ? 'introvert' : 'extrovert';
+                const clean = Math.random() > 0.5 ? 'neat' : 'casual';
+                const petsOptions = ['has', 'friendly', 'no'];
+                const pets = petsOptions[Math.floor(Math.random() * 3)];
+                const budgetRanges = [[2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 10], [10, 12]];
+                const budgetRange = budgetRanges[Math.floor(Math.random() * budgetRanges.length)];
+
+                // Generate ratings
+                const privacy = Math.round((3 + Math.random() * 2) * 10) / 10;
+                const hygiene = Math.round((3 + Math.random() * 2) * 10) / 10;
+                const finance = Math.round((3 + Math.random() * 2) * 10) / 10;
+                const communication = Math.round((3 + Math.random() * 2) * 10) / 10;
+                const avgRating = Math.round(((privacy + hygiene + finance + communication) / 4) * 10) / 10;
+
+                // Some users have lower ratings for realism
+                const hasLowerRating = Math.random() > 0.8;
+                const adjustedRatings = hasLowerRating ? {
+                    privacy: Math.round((2 + Math.random() * 1.5) * 10) / 10,
+                    hygiene: Math.round((2 + Math.random() * 1.5) * 10) / 10,
+                    finance: Math.round((2.5 + Math.random() * 1.5) * 10) / 10,
+                    communication: Math.round((2.5 + Math.random() * 1.5) * 10) / 10
+                } : { privacy, hygiene, finance, communication };
+
+                const finalAvg = Math.round(((adjustedRatings.privacy + adjustedRatings.hygiene + adjustedRatings.finance + adjustedRatings.communication) / 4) * 10) / 10;
+
+                const gender = Math.random() > 0.5 ? 'female' : 'male';
+                const age = 20 + Math.floor(Math.random() * 15);
+
+                const badges = [];
+                if (Math.random() > 0.5) badges.push('verified');
+                if (Math.random() > 0.6) badges.push('fast_responder');
+                if (finalAvg >= 4.5) badges.push('top_rated');
+
+                // Generate reviews
+                const reviewCount = Math.floor(Math.random() * 5) + 1;
+                const reviews = [];
+                const reviewTexts = [
+                    "Great roommate! Very clean and respectful of shared spaces.",
+                    "Easy to communicate with and always pays bills on time.",
+                    "Quiet and considerate. Would recommend!",
+                    "Sometimes leaves dishes in the sink, but overall a good person to live with.",
+                    "Very organized and keeps the apartment tidy.",
+                    "Friendly and respectful of privacy.",
+                    "A bit messy sometimes but always apologetic and quick to clean up.",
+                    "Excellent roommate experience. Clear communication.",
+                    "Good at sharing household responsibilities.",
+                    "Reliable with rent payments, but noisy at night sometimes."
+                ];
+
+                for (let r = 0; r < reviewCount; r++) {
+                    reviews.push({
+                        reviewer: firstNames[Math.floor(Math.random() * firstNames.length)],
+                        text: reviewTexts[Math.floor(Math.random() * reviewTexts.length)],
+                        rating: Math.round((3.5 + Math.random() * 1.5) * 10) / 10,
+                        date: `${Math.floor(Math.random() * 12) + 1} months ago`,
+                        anonymous: Math.random() > 0.7
+                    });
+                }
+
+                users.push({
+                    id: userId++,
+                    name: firstNames[(dIndex * 3 + i) % firstNames.length],
+                    avatar: avatarEmojis[(dIndex * 3 + i) % avatarEmojis.length],
+                    age,
+                    gender,
+                    job: jobs[(dIndex * 3 + i) % jobs.length],
+                    district: district.id,
+                    districtName: district.name,
+                    budgetMin: budgetRange[0],
+                    budgetMax: budgetRange[1],
+                    sleep,
+                    social,
+                    clean,
+                    pets,
+                    ratings: adjustedRatings,
+                    avgRating: finalAvg,
+                    badges,
+                    reviews,
+                    bio: generateBio(sleep, social, clean, pets, jobs[(dIndex * 3 + i) % jobs.length]),
+                    online: Math.random() > 0.5,
+                    lastActive: Math.random() > 0.5 ? 'Online' : `${Math.floor(Math.random() * 24)}h ago`
+                });
+            }
+        });
+
+        function generateBio(sleep, social, clean, pets, job) {
+            const sleepText = sleep === 'early' ? "I'm an early bird who loves morning productivity" : "Night owl here - I do my best work after dark";
+            const socialText = social === 'introvert' ? "I prefer quiet evenings at home" : "I love having friends over and socializing";
+            const cleanText = clean === 'neat' ? "Cleanliness is important to me" : "I'm fairly relaxed about tidiness but not messy";
+            const petsText = pets === 'has' ? "I have a furry companion" : pets === 'friendly' ? "I love animals and am pet-friendly" : "I prefer a pet-free environment";
+
+            return `${job} looking for a compatible roommate. ${sleepText}. ${socialText}. ${cleanText}. ${petsText}. Let's create a harmonious living space together! 🏠`;
+        }
+
+        // Current user simulation
+        const currentUserId = 1;
+        const currentUser = users.find(u => u.id === currentUserId);
+
+        // Active filters
+        let activeFilters = {
+            districts: [],
+            budget: '',
+            sleep: null,
+            social: null,
+            clean: null,
+            pets: null
+        };
+
+        let activeChatUserId = null;
+
+        // ============================================
+        // SDK INITIALIZATION
+        // ============================================
+
+        const dataHandler = {
+            onDataChanged(data) {
+                matchRequests = data.filter(d => d.type === 'match_request');
+                messages = data.filter(d => d.type === 'message');
+                updateUnreadBadge();
+                if (activeChatUserId) {
+                    renderChatMessages(activeChatUserId);
+                }
+            }
+        };
+
+        async function initApp() {
+            // Initialize Element SDK
+            if (window.elementSdk) {
+                window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange: async (newConfig) => {
+                        config = { ...defaultConfig, ...newConfig };
+                        applyConfig();
+                    },
+                    mapToCapabilities: (cfg) => ({
+                        recolorables: [
+                            {
+                                get: () => cfg.background_color || defaultConfig.background_color,
+                                set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+                            },
+                            {
+                                get: () => cfg.surface_color || defaultConfig.surface_color,
+                                set: (v) => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
+                            },
+                            {
+                                get: () => cfg.text_color || defaultConfig.text_color,
+                                set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+                            },
+                            {
+                                get: () => cfg.primary_action_color || defaultConfig.primary_action_color,
+                                set: (v) => { cfg.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); }
+                            },
+                            {
+                                get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color,
+                                set: (v) => { cfg.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); }
+                            }
+                        ],
+                        borderables: [],
+                        fontEditable: {
+                            get: () => cfg.font_family || defaultConfig.font_family,
+                            set: (v) => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+                        },
+                        fontSizeable: {
+                            get: () => cfg.font_size || defaultConfig.font_size,
+                            set: (v) => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+                        }
+                    }),
+                    mapToEditPanelValues: (cfg) => new Map([
+                        ['hero_title', cfg.hero_title || defaultConfig.hero_title],
+                        ['hero_subtitle', cfg.hero_subtitle || defaultConfig.hero_subtitle]
+                    ])
+                });
+            }
+
+            // Initialize Data SDK
+            if (window.dataSdk) {
+                const result = await window.dataSdk.init(dataHandler);
+                if (!result.isOk) {
+                    console.error('Failed to initialize Data SDK');
+                }
+            }
+
+            // Initialize UI
+            populateDistrictFilters();
+            renderCarousel();
+            renderProfiles();
+            renderChatList();
+            applyConfig();
+        }
+
+        function applyConfig() {
+            const root = document.documentElement;
+            const bgColor = config.background_color || defaultConfig.background_color;
+            const surfaceColor = config.surface_color || defaultConfig.surface_color;
+            const textColor = config.text_color || defaultConfig.text_color;
+            const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+            const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+            const fontFamily = config.font_family || defaultConfig.font_family;
+            const fontSize = config.font_size || defaultConfig.font_size;
+
+            document.body.style.backgroundColor = bgColor;
+            document.body.style.fontFamily = `${fontFamily}, sans-serif`;
+            document.body.style.fontSize = `${fontSize}px`;
+
+            // Update hero text
+            const heroTitle = document.getElementById('hero-title');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+            if (heroTitle) {
+                heroTitle.innerHTML = (config.hero_title || defaultConfig.hero_title).replace('Perfect', '<span class="gradient-text">Perfect</span>');
+            }
+            if (heroSubtitle) {
+                heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+            }
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+
+        function navigateTo(page) {
+            const pages = ['landing', 'discover', 'messages'];
+            pages.forEach(p => {
+                const el = document.getElementById(`${p}-page`);
+                if (el) {
+                    el.classList.toggle('hidden', p !== page);
+                }
+            });
+
+            if (page === 'messages') {
+                document.getElementById('chat-window').classList.add('hidden');
+                document.getElementById('chat-empty-state').classList.remove('hidden');
+                document.getElementById('chat-empty-state').classList.add('flex');
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        // ============================================
+        // FILTERS
+        // ============================================
+
+        function populateDistrictFilters() {
+            const container = document.getElementById('district-filters');
+            const heroSelect = document.getElementById('hero-district');
+
+            districts.forEach(d => {
+                // Sidebar filters
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer';
+                label.innerHTML = `
+          <input type="checkbox" value="${d.id}" class="w-4 h-4 text-mint-500 rounded focus:ring-mint-500" onchange="handleDistrictFilter(this)">
+          <span class="text-slate-600">${d.emoji} ${d.name}</span>
+        `;
+                container.appendChild(label);
+
+                // Hero select
+                const option = document.createElement('option');
+                option.value = d.id;
+                option.textContent = `${d.emoji} ${d.name}`;
+                heroSelect.appendChild(option);
+            });
+        }
+
+        function handleDistrictFilter(checkbox) {
+            if (checkbox.checked) {
+                activeFilters.districts.push(checkbox.value);
+            } else {
+                activeFilters.districts = activeFilters.districts.filter(d => d !== checkbox.value);
+            }
+            applyFilters();
+        }
+
+        function toggleFilter(type, value) {
+            const btn = document.querySelector(`[data-filter="${type}-${value}"]`);
+
+            if (activeFilters[type] === value) {
+                activeFilters[type] = null;
+                btn.classList.remove('active');
+            } else {
+                // Remove active from other buttons of same type
+                document.querySelectorAll(`[data-filter^="${type}-"]`).forEach(b => b.classList.remove('active'));
+                activeFilters[type] = value;
+                btn.classList.add('active');
+            }
+
+            applyFilters();
+        }
+
+        function resetFilters() {
+            activeFilters = {
+                districts: [],
+                budget: '',
+                sleep: null,
+                social: null,
+                clean: null,
+                pets: null
+            };
+
+            // Reset UI
+            document.querySelectorAll('#district-filters input').forEach(cb => cb.checked = false);
+            document.querySelectorAll('input[name="budget"]')[0].checked = true;
+            document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            // Get budget filter
+            const budgetRadio = document.querySelector('input[name="budget"]:checked');
+            activeFilters.budget = budgetRadio ? budgetRadio.value : '';
+
+            renderProfiles();
+        }
+
+        function searchFromHero() {
+            const district = document.getElementById('hero-district').value;
+            const budget = document.getElementById('hero-budget').value;
+
+            if (district) {
+                activeFilters.districts = [district];
+                document.querySelector(`#district-filters input[value="${district}"]`).checked = true;
+            }
+
+            if (budget) {
+                activeFilters.budget = budget;
+                document.querySelector(`input[name="budget"][value="${budget}"]`).checked = true;
+            }
+
+            navigateTo('discover');
+            applyFilters();
+        }
+
+        function getFilteredUsers() {
+            let filtered = users.filter(u => u.id !== currentUserId);
+
+            // District filter
+            if (activeFilters.districts.length > 0) {
+                filtered = filtered.filter(u => activeFilters.districts.includes(u.district));
+            }
+
+            // Budget filter
+            if (activeFilters.budget) {
+                filtered = filtered.filter(u => {
+                    const [min, max] = activeFilters.budget.split('-').map(v => v === '+' ? 100 : parseInt(v));
+                    return u.budgetMin >= min && u.budgetMax <= (max || 100);
+                });
+            }
+
+            // Lifestyle filters
+            if (activeFilters.sleep) {
+                filtered = filtered.filter(u => u.sleep === activeFilters.sleep);
+            }
+            if (activeFilters.social) {
+                filtered = filtered.filter(u => u.social === activeFilters.social);
+            }
+            if (activeFilters.clean) {
+                filtered = filtered.filter(u => u.clean === activeFilters.clean);
+            }
+            if (activeFilters.pets) {
+                filtered = filtered.filter(u => u.pets === activeFilters.pets);
+            }
+
+            // Sort
+            const sortBy = document.getElementById('sort-select')?.value || 'compatibility';
+            switch (sortBy) {
+                case 'rating':
+                    filtered.sort((a, b) => b.avgRating - a.avgRating);
+                    break;
+                case 'budget-low':
+                    filtered.sort((a, b) => a.budgetMin - b.budgetMin);
+                    break;
+                case 'budget-high':
+                    filtered.sort((a, b) => b.budgetMax - a.budgetMax);
+                    break;
+                default:
+                    filtered.sort((a, b) => calculateCompatibility(b) - calculateCompatibility(a));
+            }
+
+            return filtered;
+        }
+
+        function calculateCompatibility(user) {
+            let score = 50;
+            if (user.sleep === currentUser.sleep) score += 15;
+            if (user.social === currentUser.social) score += 15;
+            if (user.clean === currentUser.clean) score += 10;
+            if (user.pets === currentUser.pets || user.pets === 'friendly' || currentUser.pets === 'friendly') score += 10;
+            return Math.min(score, 98);
+        }
+
+        // ============================================
+        // RENDERING
+        // ============================================
+
+        function renderCarousel() {
+            const track = document.getElementById('carousel-track');
+            const topRated = users.filter(u => u.avgRating >= 4.5 && u.id !== currentUserId).slice(0, 10);
+
+            // Duplicate for infinite scroll effect
+            const allCards = [...topRated, ...topRated];
+
+            track.innerHTML = allCards.map(user => `
+        <div class="flex-shrink-0 w-72 bg-white rounded-2xl shadow-lg p-5 card-hover cursor-pointer" onclick="openUserProfile(${user.id})">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-2xl gradient-mint flex items-center justify-center text-2xl">${user.avatar}</div>
+            <div>
+              <h3 class="font-bold text-slate-900">${user.name}, ${user.age}</h3>
+              <p class="text-sm text-slate-500">${user.districtName}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mb-3">
+            <div class="flex items-center gap-1 text-amber-500">
+              ${'★'.repeat(Math.floor(user.avgRating))}${user.avgRating % 1 >= 0.5 ? '½' : ''}
+            </div>
+            <span class="text-slate-600 text-sm">${user.avgRating}</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            ${user.badges.includes('top_rated') ? '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">🏆 Top Rated</span>' : ''}
+            ${user.badges.includes('verified') ? '<span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">✓ Verified</span>' : ''}
+          </div>
+        </div>
+      `).join('');
+        }
+
+        function renderProfiles() {
+            const grid = document.getElementById('profiles-grid');
+            const filtered = getFilteredUsers();
+
+            // Update counts
+            document.getElementById('results-count').textContent = filtered.length;
+            document.getElementById('showing-count').textContent = filtered.length;
+
+            grid.innerHTML = filtered.map((user, index) => {
+                const compatibility = calculateCompatibility(user);
+                return `
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden card-hover animate-fadeInUp" style="animation-delay: ${index * 0.05}s;">
+            <div class="p-5">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="relative">
+                    <div class="w-14 h-14 rounded-2xl gradient-mint flex items-center justify-center text-2xl">${user.avatar}</div>
+                    ${user.online ? '<span class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>' : ''}
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-slate-900">${user.name}, ${user.age}</h3>
+                    <p class="text-sm text-slate-500">${user.job}</p>
+                  </div>
+                </div>
+                <div class="relative w-12 h-12">
+                  <svg class="w-12 h-12 transform -rotate-90">
+                    <circle cx="24" cy="24" r="20" stroke="#e2e8f0" stroke-width="4" fill="none"/>
+                    <circle cx="24" cy="24" r="20" stroke="#00CBA9" stroke-width="4" fill="none" 
+                            stroke-dasharray="${compatibility * 1.25} 125" stroke-linecap="round"/>
+                  </svg>
+                  <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-mint-600">${compatibility}%</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-2 text-sm text-slate-600 mb-3">
+                <span>📍 ${user.districtName}</span>
+                <span>•</span>
+                <span>💰 ${user.budgetMin}-${user.budgetMax}M</span>
+              </div>
+              
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">${user.sleep === 'early' ? '🌅 Early Bird' : '🦉 Night Owl'}</span>
+                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">${user.social === 'introvert' ? '🤫 Introvert' : '🎉 Extrovert'}</span>
+                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">${user.pets === 'has' ? '🐕 Has Pet' : user.pets === 'friendly' ? '💕 Pet OK' : '🚫 No Pets'}</span>
+              </div>
+              
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-1">
+                  <span class="text-amber-500">★</span>
+                  <span class="font-semibold text-slate-900">${user.avgRating}</span>
+                  <span class="text-slate-400 text-sm">(${user.reviews.length} reviews)</span>
+                </div>
+                <div class="flex gap-1">
+                  ${user.badges.includes('verified') ? '<span class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-xs" title="Verified">✓</span>' : ''}
+                  ${user.badges.includes('fast_responder') ? '<span class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-xs" title="Fast Responder">⚡</span>' : ''}
+                  ${user.badges.includes('top_rated') ? '<span class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs" title="Top Rated">🏆</span>' : ''}
+                </div>
+              </div>
+              
+              <div class="flex gap-2">
+                <button onclick="openUserProfile(${user.id})" class="flex-1 px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-colors">
+                  View Profile
+                </button>
+                <button onclick="sendMatchRequest(${user.id})" class="flex-1 btn-primary text-white px-4 py-2 rounded-xl font-medium">
+                  Match 💫
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+            }).join('');
+        }
+
+        // ============================================
+        // PROFILE MODAL
+        // ============================================
+
+        function openUserProfile(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const compatibility = calculateCompatibility(user);
+            const modal = document.getElementById('profile-modal');
+            const content = document.getElementById('profile-modal-content');
+
+            const commonTraits = [];
+            if (user.sleep === currentUser.sleep) commonTraits.push(user.sleep === 'early' ? '🌅 Both Early Birds' : '🦉 Both Night Owls');
+            if (user.social === currentUser.social) commonTraits.push(user.social === 'introvert' ? '🤫 Both Introverts' : '🎉 Both Extroverts');
+            if (user.clean === currentUser.clean) commonTraits.push(user.clean === 'neat' ? '✨ Both Neat Freaks' : '😌 Both Casual');
+
+            content.innerHTML = `
+        <button onclick="closeProfileModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors z-10">
+          <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+        
+        <!-- Header -->
+        <div class="gradient-mint p-8 text-white">
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <div class="w-24 h-24 rounded-3xl bg-white/20 flex items-center justify-center text-5xl">${user.avatar}</div>
+            <div class="text-center md:text-left">
+              <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
+                <h2 class="text-2xl font-bold">${user.name}, ${user.age}</h2>
+                ${user.badges.includes('verified') ? '<span class="px-2 py-1 bg-white/20 rounded-full text-xs font-medium">✓ Verified</span>' : ''}
+              </div>
+              <p class="text-mint-100">${user.job} • ${user.districtName}</p>
+              <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
+                <span class="text-amber-300">★</span>
+                <span class="font-semibold">${user.avgRating}</span>
+                <span class="text-mint-100">(${user.reviews.length} reviews)</span>
+              </div>
+            </div>
+            <div class="md:ml-auto text-center">
+              <div class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mb-2">
+                <span class="text-2xl font-bold">${compatibility}%</span>
+              </div>
+              <span class="text-sm text-mint-100">Match Score</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-8">
+          <!-- Bio -->
+          <div class="mb-8">
+            <h3 class="text-lg font-bold text-slate-900 mb-3">About</h3>
+            <p class="text-slate-600 leading-relaxed">${user.bio}</p>
+          </div>
+          
+          <!-- Budget & Location -->
+          <div class="grid md:grid-cols-2 gap-4 mb-8">
+            <div class="bg-slate-50 rounded-xl p-4">
+              <h4 class="font-semibold text-slate-900 mb-2">💰 Budget Range</h4>
+              <p class="text-2xl font-bold text-mint-600">${user.budgetMin}M - ${user.budgetMax}M VND</p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4">
+              <h4 class="font-semibold text-slate-900 mb-2">📍 Preferred Area</h4>
+              <p class="text-2xl font-bold text-mint-600">${user.districtName}</p>
+            </div>
+          </div>
+          
+          <!-- Lifestyle Chart -->
+          <div class="mb-8">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Living DNA</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="text-center p-4 bg-slate-50 rounded-xl">
+                <div class="text-3xl mb-2">${user.sleep === 'early' ? '🌅' : '🦉'}</div>
+                <div class="font-medium text-slate-900">${user.sleep === 'early' ? 'Early Bird' : 'Night Owl'}</div>
+              </div>
+              <div class="text-center p-4 bg-slate-50 rounded-xl">
+                <div class="text-3xl mb-2">${user.social === 'introvert' ? '🤫' : '🎉'}</div>
+                <div class="font-medium text-slate-900">${user.social === 'introvert' ? 'Introvert' : 'Extrovert'}</div>
+              </div>
+              <div class="text-center p-4 bg-slate-50 rounded-xl">
+                <div class="text-3xl mb-2">${user.clean === 'neat' ? '✨' : '😌'}</div>
+                <div class="font-medium text-slate-900">${user.clean === 'neat' ? 'Super Neat' : 'Casual'}</div>
+              </div>
+              <div class="text-center p-4 bg-slate-50 rounded-xl">
+                <div class="text-3xl mb-2">${user.pets === 'has' ? '🐕' : user.pets === 'friendly' ? '💕' : '🚫'}</div>
+                <div class="font-medium text-slate-900">${user.pets === 'has' ? 'Has Pet' : user.pets === 'friendly' ? 'Pet Friendly' : 'No Pets'}</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Ratings -->
+          <div class="mb-8">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Performance Ratings</h3>
+            <div class="space-y-3">
+              ${renderRatingBar('🔒 Privacy', user.ratings.privacy)}
+              ${renderRatingBar('🧹 Hygiene', user.ratings.hygiene)}
+              ${renderRatingBar('💳 Finance', user.ratings.finance)}
+              ${renderRatingBar('💬 Communication', user.ratings.communication)}
+            </div>
+          </div>
+          
+          <!-- Common Traits -->
+          ${commonTraits.length > 0 ? `
+            <div class="bg-mint-50 rounded-xl p-4 mb-8">
+              <h4 class="font-semibold text-mint-800 mb-2">✨ You have in common</h4>
+              <div class="flex flex-wrap gap-2">
+                ${commonTraits.map(t => `<span class="px-3 py-1 bg-white text-mint-700 rounded-full text-sm font-medium">${t}</span>`).join('')}
+              </div>
+            </div>
+          ` : ''}
+          
+          <!-- Reviews -->
+          <div class="mb-8">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Reviews from Past Roommates</h3>
+            <div class="space-y-4 max-h-64 overflow-y-auto">
+              ${user.reviews.map(r => `
+                <div class="bg-slate-50 rounded-xl p-4">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="font-medium text-slate-900">${r.anonymous ? 'Anonymous' : r.reviewer}</span>
+                    <div class="flex items-center gap-1">
+                      <span class="text-amber-500">★</span>
+                      <span class="text-slate-600">${r.rating}</span>
+                    </div>
+                  </div>
+                  <p class="text-slate-600 text-sm mb-2">"${r.text}"</p>
+                  <span class="text-xs text-slate-400">${r.date}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="flex gap-3">
+            <button onclick="closeProfileModal()" class="flex-1 px-6 py-3 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-colors">
+              Close
+            </button>
+            <button onclick="sendMatchRequest(${user.id}); closeProfileModal();" class="flex-1 btn-primary text-white px-6 py-3 rounded-xl font-semibold">
+              Send Match Request 💫
+            </button>
+          </div>
+        </div>
+      `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function renderRatingBar(label, value) {
+            const percentage = (value / 5) * 100;
+            const color = value >= 4 ? 'bg-mint-500' : value >= 3 ? 'bg-amber-500' : 'bg-red-500';
+            return `
+        <div class="flex items-center gap-3">
+          <span class="w-36 text-sm text-slate-600">${label}</span>
+          <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div class="${color} h-full rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+          </div>
+          <span class="w-10 text-sm font-medium text-slate-900">${value}</span>
+        </div>
+      `;
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        // ============================================
+        // MATCHING & MESSAGING
+        // ============================================
+
+        async function sendMatchRequest(targetId) {
+            if (!window.dataSdk) {
+                showToast('Match request sent! 💫', '✓');
+                return;
+            }
+
+            const result = await window.dataSdk.create({
+                type: 'match_request',
+                user_id: currentUserId.toString(),
+                target_id: targetId.toString(),
+                status: 'pending',
+                message: '',
+                timestamp: new Date().toISOString()
+            });
+
+            if (result.isOk) {
+                showToast('Match request sent! 💫', '✓');
+            } else {
+                showToast('Failed to send request', '✗');
+            }
+        }
+
+        function renderChatList() {
+            const container = document.getElementById('chat-list');
+            // Simulate matched users
+            const matchedUsers = users.slice(1, 6);
+
+            container.innerHTML = matchedUsers.map(user => `
+        <div class="p-4 hover:bg-slate-50 cursor-pointer transition-colors ${activeChatUserId === user.id ? 'bg-mint-50' : ''}" onclick="openChat(${user.id})">
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <div class="w-12 h-12 rounded-full gradient-mint flex items-center justify-center text-xl">${user.avatar}</div>
+              ${user.online ? '<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>' : ''}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-slate-900">${user.name}</h3>
+              <p class="text-sm text-slate-500 truncate">Click to start chatting</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+        }
+
+        function openChat(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            activeChatUserId = userId;
+
+            // Update UI
+            document.getElementById('chat-window').classList.remove('hidden');
+            document.getElementById('chat-empty-state').classList.add('hidden');
+            document.getElementById('chat-empty-state').classList.remove('flex');
+
+            document.getElementById('chat-avatar').textContent = user.avatar;
+            document.getElementById('chat-name').textContent = user.name;
+            document.getElementById('chat-status').innerHTML = user.online
+                ? '<span class="w-2 h-2 bg-green-500 rounded-full online-indicator"></span> Online'
+                : `<span class="w-2 h-2 bg-slate-400 rounded-full"></span> ${user.lastActive}`;
+
+            // Render compatibility
+            const compatDetails = document.getElementById('compatibility-details');
+            const commonTraits = [];
+            if (user.sleep === currentUser.sleep) commonTraits.push({ icon: user.sleep === 'early' ? '🌅' : '🦉', text: 'Same sleep schedule' });
+            if (user.social === currentUser.social) commonTraits.push({ icon: user.social === 'introvert' ? '🤫' : '🎉', text: 'Similar social style' });
+            if (user.clean === currentUser.clean) commonTraits.push({ icon: user.clean === 'neat' ? '✨' : '😌', text: 'Same cleanliness level' });
+
+            compatDetails.innerHTML = commonTraits.map(t => `
+        <div class="flex items-center gap-3 p-3 bg-mint-50 rounded-xl">
+          <span class="text-xl">${t.icon}</span>
+          <span class="text-sm text-mint-800">${t.text}</span>
+        </div>
+      `).join('') || '<p class="text-slate-500 text-sm">Different lifestyles - a great opportunity to learn!</p>';
+
+            renderChatMessages(userId);
+            renderChatList();
+        }
+
+        function renderChatMessages(userId) {
+            const container = document.getElementById('messages-container');
+            const chatMessages = messages.filter(m =>
+                (m.user_id === currentUserId.toString() && m.target_id === userId.toString()) ||
+                (m.user_id === userId.toString() && m.target_id === currentUserId.toString())
+            ).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+            if (chatMessages.length === 0) {
+                container.innerHTML = `
+          <div class="text-center py-8">
+            <div class="text-4xl mb-4">👋</div>
+            <p class="text-slate-500">Start the conversation! Say hello.</p>
+          </div>
+        `;
+                return;
+            }
+
+            container.innerHTML = chatMessages.map(m => {
+                const isSent = m.user_id === currentUserId.toString();
+                return `
+          <div class="flex ${isSent ? 'justify-end' : 'justify-start'}">
+            <div class="${isSent ? 'message-bubble-sent text-white' : 'message-bubble-received text-slate-800'} px-4 py-2 rounded-2xl max-w-xs">
+              ${m.message}
+            </div>
+          </div>
+        `;
+            }).join('');
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+
+            if (!message || !activeChatUserId) return;
+
+            if (window.dataSdk) {
+                const result = await window.dataSdk.create({
+                    type: 'message',
+                    user_id: currentUserId.toString(),
+                    target_id: activeChatUserId.toString(),
+                    status: 'sent',
+                    message: message,
+                    timestamp: new Date().toISOString()
+                });
+
+                if (!result.isOk) {
+                    showToast('Failed to send message', '✗');
+                    return;
+                }
+            }
+
+            input.value = '';
+            renderChatMessages(activeChatUserId);
+        }
+
+        function handleMessageKeypress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function updateUnreadBadge() {
+            const badge = document.getElementById('unread-badge');
+            const unread = messages.filter(m => m.target_id === currentUserId.toString() && m.status === 'sent').length;
+            if (unread > 0) {
+                badge.textContent = unread > 9 ? '9+' : unread;
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            } else {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+            }
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+
+        function showToast(message, icon = '✓') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            document.getElementById('toast-icon').textContent = icon;
+
+            toast.classList.remove('hidden');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function toggleMobileFilters() {
+            const sidebar = document.getElementById('filter-sidebar');
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('fixed');
+            sidebar.classList.toggle('inset-0');
+            sidebar.classList.toggle('z-40');
+        }
+
+        // Initialize on load
+        initApp();
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9cbbac90766cddc6',t:'MTc3MDcyNzIxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
