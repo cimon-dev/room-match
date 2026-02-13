@@ -37,13 +37,13 @@ export default function ProfileModal({ user, onClose = () => { }, onMatch = () =
 
     return (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-            <div className="min-h-screen px-4 flex items-center justify-center">
+            <div className="min-h-screen px-2 sm:px-4 flex items-center justify-center">
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
-                <div className="relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full h-[80vh] overflow-y-auto animate-fadeInUp flex flex-col">
-                    <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center z-10">✕</button>
-                    <div className="gradient-mint p-8 text-white">
-                        <div className="flex flex-col md:flex-row items-center gap-6">
-                            <div className="w-24 h-24 rounded-3xl overflow-hidden bg-white/20 flex items-center justify-center">
+                <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md sm:max-w-2xl h-[95vh] sm:h-[80vh] overflow-y-auto flex flex-col">
+                    <button onClick={onClose} className="absolute top-2 right-2 sm:top-4 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center z-10">✕</button>
+                    <div className="gradient-mint p-5 sm:p-8 text-white rounded-t-2xl sm:rounded-t-3xl">
+                        <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl overflow-hidden bg-white/20 flex items-center justify-center">
                                 <img
                                     src={isCurrentUser ? 'https://randomuser.me/api/portraits/men/1.jpg' : user.avatarUrl}
                                     alt={user.name}
@@ -53,33 +53,33 @@ export default function ProfileModal({ user, onClose = () => { }, onMatch = () =
                             </div>
                             <div className="text-center md:text-left">
                                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
-                                    <h2 className="text-2xl font-bold">{user.name}, {user.age}</h2>
+                                    <h2 className="text-xl sm:text-2xl font-bold">{user.name}, {user.age}</h2>
                                 </div>
-                                <p className="text-mint-100">{user.job} • {user.districtName}</p>
+                                <p className="text-mint-100 text-sm sm:text-base">{user.job} • {user.districtName}</p>
                                 <div className="flex items-center justify-center md:justify-start gap-2 mt-2">
                                     <span className="text-amber-300">★</span>
                                     <span className="font-semibold">{user.avgRating}</span>
                                 </div>
                             </div>
                             {isCurrentUser ? (
-                                <div className="md:ml-auto text-center">
-                                    <button className="btn-primary px-6 py-3 rounded-xl font-semibold text-white bg-mint-600 hover:bg-mint-700 transition">Chỉnh sửa hồ sơ</button>
+                                <div className="md:ml-auto text-center mt-3 md:mt-0">
+                                    <button className="btn-primary px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-white bg-mint-600 hover:bg-mint-700 transition text-sm sm:text-base">Chỉnh sửa hồ sơ</button>
                                 </div>
                             ) : (
-                                <div className="md:ml-auto text-center">
-                                    <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mb-2">
-                                        <span className="text-2xl font-bold">{compatibility}%</span>
+                                <div className="w-full md:w-auto md:ml-auto mt-3 md:mt-0 flex flex-col items-center text-center">
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 flex items-center justify-center mb-2 mx-auto">
+                                        <span className="text-xl sm:text-2xl font-bold">{compatibility}%</span>
                                     </div>
-                                    <span className="text-sm text-mint-100">Điểm phù hợp</span>
-                                    <div className="mt-3">
-                                        <button onClick={() => { onMatch(user.id); onClose() }} className="btn-primary text-white px-6 py-3 rounded-xl font-semibold">Gửi yêu cầu kết nối 💫</button>
+                                    <span className="text-xs sm:text-sm text-mint-100">Điểm phù hợp</span>
+                                    <div className="mt-2 sm:mt-3">
+                                        <button onClick={() => { onMatch(user.id); onClose() }} className="btn-primary text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-sm sm:text-base">Gửi yêu cầu kết nối 💫</button>
                                     </div>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className="p-8 flex-1 flex flex-col">
+                    <div className="p-5 sm:p-8 flex-1 flex flex-col">
                         <div className="mb-8">
                             <h3 className="text-lg font-bold text-slate-900 mb-3">Giới thiệu</h3>
                             <p className="text-slate-600 leading-relaxed">{user.bio}</p>
