@@ -1,9 +1,9 @@
 export default function Stats() {
     const stats = [
-        { value: '10K+', label: 'Active Users' },
-        { value: '5K+', label: 'Successful Matches' },
-        { value: '12', label: 'Hanoi Districts' },
-        { value: '4.8⭐', label: 'Average Rating' }
+        { value: '10K+', label: 'Người dùng hoạt động' },
+        { value: '5K+', label: 'Ghép đôi thành công' },
+        { value: '12', label: 'Quận tại Hà Nội' },
+        { value: '4.8⭐', label: 'Đánh giá trung bình' }
     ]
 
     return (

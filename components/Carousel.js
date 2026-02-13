@@ -37,7 +37,14 @@ export default function Carousel({ users = [], onOpenProfile = () => { } }) {
                                 onClick={() => onOpenProfile(u.id)}
                             >
                                 <div className="flex items-center gap-4 mb-4 p-5 pb-0">
-                                    <div className="w-14 h-14 rounded-2xl gradient-mint flex items-center justify-center text-2xl">{u.avatar}</div>
+                                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center">
+                                        <img
+                                            src={u.avatarUrl}
+                                            alt={u.name}
+                                            className="w-full h-full object-cover"
+                                            onError={e => { e.target.onerror = null; e.target.src = u.gender === 'male' ? 'https://randomuser.me/api/portraits/men/1.jpg' : 'https://randomuser.me/api/portraits/women/1.jpg'; }}
+                                        />
+                                    </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900">{u.name}, {u.age}</h3>
                                         <p className="text-sm text-slate-500">{u.districtName}</p>

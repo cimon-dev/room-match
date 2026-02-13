@@ -1,3 +1,16 @@
+/* Ẩn scrollbar cho sidebar tin nhắn */
+.scrollbar-hide {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Webkit */
+}
+
 html,
 body,
 #__next {

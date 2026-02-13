@@ -1,7 +1,21 @@
 
 import '../styles/globals.css';
 import Head from 'next/head';
-import { AppDataProvider } from '../context/AppDataContext';
+import { AppDataProvider, useAppDataContext } from '../context/AppDataContext';
+import ProfileModal from '../components/ProfileModal';
+
+function ProfileModalGlobal() {
+    const app = useAppDataContext?.() || {};
+    if (!app.profileModalUser) return null;
+    return (
+        <ProfileModal
+            user={app.profileModalUser}
+            onClose={app.closeProfile}
+            onMatch={app.sendMatchRequest}
+            calculateCompatibility={app.calculateCompatibility}
+        />
+    );
+}
 
 export default function App({ Component, pageProps }) {
     return (
@@ -16,6 +30,7 @@ export default function App({ Component, pageProps }) {
             </Head>
             <AppDataProvider>
                 <Component {...pageProps} />
+                <ProfileModalGlobal />
             </AppDataProvider>
         </>
     );

@@ -5,9 +5,9 @@ export default function Footer() {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
                         <div className="w-10 h-10 gradient-mint rounded-xl flex items-center justify-center">RM</div>
-                        <span className="text-xl font-bold">RoomMatch Hanoi</span>
+                        <span className="text-xl font-bold">RoomMatch Hà Nội</span>
                     </div>
-                    <div className="text-slate-400 text-sm">© 2024 RoomMatch. Made with 💚 for Hanoians</div>
+                    <div className="text-slate-400 text-sm">© 2026 RoomMatch. Sản phẩm dành cho người Hà Nội 💚</div>
                 </div>
             </div>
         </footer>

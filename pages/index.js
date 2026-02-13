@@ -4,9 +4,8 @@ import { useAppDataContext } from '../context/AppDataContext'
 import Carousel from '../components/Carousel'
 import Toast from '../components/Toast'
 import HowItWorks from '../components/HowItWorks'
-
 import Stats from '../components/Stats'
-
+import TopRatedRoommates from '../components/TopRatedRoommates'
 import Footer from '../components/Footer'
 
 export default function Home() {
@@ -20,10 +19,7 @@ export default function Home() {
                 <Carousel users={app.users} onOpenProfile={app.openProfile} />
                 <HowItWorks />
                 <Stats />
-                <section className="max-w-7xl mx-auto p-6">
-                    <h2 className="text-2xl font-bold mb-4">Top Rated Roommates (demo)</h2>
-                    <p className="text-slate-600">This app mirrors the single-file prototype with components and state.</p>
-                </section>
+                <TopRatedRoommates />
             </main>
             <Toast toast={app.toast} />
             <Footer />
