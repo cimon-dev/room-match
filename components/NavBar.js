@@ -42,7 +42,11 @@ export default function NavBar() {
                     {/* Logo */}
                     <div className="flex items-center gap-2 min-w-0">
                         <Link href="/" className="flex items-center gap-2 min-w-0">
-                            <div className="w-9 h-9 sm:w-10 sm:h-10 gradient-mint rounded-xl flex items-center justify-center text-white text-lg sm:text-xl font-bold shrink-0">RM</div>
+                            <img
+                                src="/images/logo.jpg"
+                                alt="RoomMatch logo"
+                                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover shrink-0"
+                            />
                             <span className="text-lg sm:text-xl font-bold gradient-text whitespace-nowrap">RoomMatch</span>
                         </Link>
                     </div>
