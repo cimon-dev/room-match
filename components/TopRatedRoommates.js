@@ -16,7 +16,7 @@ export default function TopRatedRoommates() {
                                     src={u.avatarUrl}
                                     alt={u.name}
                                     className="w-full h-full object-cover"
-                                    onError={e => { e.target.onerror = null; e.target.src = u.gender === 'male' ? 'https://randomuser.me/api/portraits/men/1.jpg' : 'https://randomuser.me/api/portraits/women/1.jpg'; }}
+                                    onError={e => { e.target.onerror = null; e.target.src = u.gender === 'male' ? '/images/boy-01.jpg' : '/images/girl-01.jpg'; }}
                                 />
                             </div>
                             <h3 className="font-bold text-slate-900 text-lg mb-1">{u.name}, {u.age}</h3>

@@ -4,6 +4,7 @@ export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibil
     const circumference = 2 * Math.PI * radius
     const percent = Math.max(0, Math.min(compatibility, 100))
     const dash = (percent / 100) * circumference
+    const fallbackAvatarSrc = user.gender === 'male' ? '/images/boy-01.jpg' : '/images/girl-01.jpg'
 
     return (
         <div className="bg-white rounded-2xl shadow-md overflow-hidden card-hover flex flex-col">
@@ -15,7 +16,7 @@ export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibil
                                 src={user.avatarUrl}
                                 alt={user.name}
                                 className="w-full h-full object-cover"
-                                onError={e => { e.target.onerror = null; e.target.src = user.gender === 'male' ? 'https://randomuser.me/api/portraits/men/1.jpg' : 'https://randomuser.me/api/portraits/women/1.jpg'; }}
+                                onError={e => { e.target.onerror = null; e.target.src = fallbackAvatarSrc; }}
                             />
                         </div>
                         <div>

@@ -68,9 +68,10 @@ export default function NavBar() {
                                 onClick={() => setShowMenu(v => !v)}
                             >
                                 <img
-                                    src="https://randomuser.me/api/portraits/men/1.jpg"
-                                    alt="avatar nam"
+                                    src={currentUser?.avatarUrl || '/images/boy-10.jpg'}
+                                    alt={currentUser?.name || 'avatar'}
                                     className="w-full h-full object-cover rounded-full"
+                                    onError={e => { e.target.onerror = null; e.target.src = '/images/boy-10.jpg'; }}
                                 />
                             </button>
                             {/* User menu (profile) */}
@@ -102,9 +103,10 @@ export default function NavBar() {
                                 onClick={() => { setShowMobileMenu(false); handleMenu('profile'); }}
                             >
                                 <img
-                                    src="https://randomuser.me/api/portraits/men/1.jpg"
-                                    alt="avatar nam"
+                                    src={currentUser?.avatarUrl || '/images/boy-10.jpg'}
+                                    alt={currentUser?.name || 'avatar'}
                                     className="w-10 h-10 object-cover rounded-full border mb-1"
+                                    onError={e => { e.target.onerror = null; e.target.src = '/images/boy-10.jpg'; }}
                                 />
                                 <span className="font-semibold text-mint-600 mt-1 text-sm">👤 Xem thông tin</span>
                             </button>

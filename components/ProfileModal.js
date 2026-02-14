@@ -45,10 +45,15 @@ export default function ProfileModal({ user, onClose = () => { }, onMatch = () =
                         <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
                             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl overflow-hidden bg-white/20 flex items-center justify-center">
                                 <img
-                                    src={isCurrentUser ? 'https://randomuser.me/api/portraits/men/1.jpg' : user.avatarUrl}
+                                    src={isCurrentUser ? (currentUser?.avatarUrl || '/images/boy-10.jpg') : user.avatarUrl}
                                     alt={user.name}
                                     className="w-full h-full object-cover"
-                                    onError={e => { e.target.onerror = null; e.target.src = user.gender === 'male' ? 'https://randomuser.me/api/portraits/men/1.jpg' : 'https://randomuser.me/api/portraits/women/1.jpg'; }}
+                                    onError={e => {
+                                        e.target.onerror = null;
+                                        e.target.src = isCurrentUser
+                                            ? '/images/boy-10.jpg'
+                                            : (user.gender === 'male' ? '/images/boy-01.jpg' : '/images/girl-01.jpg');
+                                    }}
                                 />
                             </div>
                             <div className="text-center md:text-left">
