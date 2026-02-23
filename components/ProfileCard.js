@@ -1,4 +1,4 @@
-export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibility = () => 50 }) {
+export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibility = () => 50, disableHoverEffect = false, className = '' }) {
     const compatibility = Math.round(calculateCompatibility(user))
     const radius = 20
     const circumference = 2 * Math.PI * radius
@@ -7,7 +7,7 @@ export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibil
     const avatarInitial = (user.name || '?').trim().charAt(0).toUpperCase()
 
     return (
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden card-hover flex flex-col">
+        <div className={`bg-white rounded-2xl shadow-md overflow-hidden flex flex-col ${disableHoverEffect ? '' : 'card-hover'} ${className}`}>
             <div className="p-5 flex-1 flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">

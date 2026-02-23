@@ -10,6 +10,9 @@ export default function Discover() {
     const profiles = app?.getFilteredUsers ? app.getFilteredUsers() : [];
     const [showFilters, setShowFilters] = useState(false);
     const [showSavedDialog, setShowSavedDialog] = useState(false);
+    const [compareMode, setCompareMode] = useState(false);
+    const [selectedCompareIds, setSelectedCompareIds] = useState([]);
+    const [showCompareDialog, setShowCompareDialog] = useState(false);
     const savedProfiles = useMemo(() => {
         const manualSaved = app?.savedProfiles || [];
         if (manualSaved.length > 0) {
@@ -29,6 +32,56 @@ export default function Discover() {
         if (!app?.openProfile) return;
         app.openProfile(userId);
         setShowSavedDialog(false);
+    }
+
+    function toggleCompareMode() {
+        setCompareMode(prev => {
+            const next = !prev;
+            if (!next) {
+                setSelectedCompareIds([]);
+                setShowCompareDialog(false);
+            }
+            return next;
+        });
+    }
+
+    function handleProfileCompareClick(userId) {
+        if (!compareMode) return;
+        setSelectedCompareIds(prev => {
+            if (prev.includes(userId)) {
+                const next = prev.filter(id => id !== userId);
+                if (next.length < 2) setShowCompareDialog(false);
+                return next;
+            }
+            if (prev.length === 0) return [userId];
+
+            const next = [prev[0], userId];
+            setShowCompareDialog(true);
+            return next;
+        });
+    }
+
+    const compareUsers = useMemo(() => {
+        const [leftId, rightId] = selectedCompareIds;
+        const left = app?.users?.find(u => u.id === leftId);
+        const right = app?.users?.find(u => u.id === rightId);
+        return [left, right];
+    }, [selectedCompareIds, app?.users]);
+
+    const [leftUser, rightUser] = compareUsers;
+
+    function formatLifestyle(user, key) {
+        if (!user) return '-';
+        const map = {
+            sleep: user.sleep === 'early' ? 'Dậy sớm' : 'Cú đêm',
+            social: user.social === 'introvert' ? 'Hướng nội' : 'Hướng ngoại',
+            clean: user.clean === 'neat' ? 'Rất gọn gàng' : 'Bình thường',
+            pets: user.pets === 'has' ? 'Có thú cưng' : user.pets === 'friendly' ? 'Thân thiện thú cưng' : 'Không nuôi thú cưng',
+            smoking: user.smoking === 'no' ? 'Không hút' : user.smoking === 'occasionally' ? 'Thỉnh thoảng' : 'Có hút',
+            noise: user.noise === 'quiet' ? 'Yên tĩnh' : user.noise === 'normal' ? 'Bình thường' : 'Sôi động',
+            guests: user.guests === 'rare' ? 'Hiếm khi' : user.guests === 'sometimes' ? 'Thỉnh thoảng' : 'Thường xuyên'
+        };
+        return map[key] || '-';
     }
 
     if (!app) {
@@ -89,6 +142,12 @@ export default function Discover() {
                         <div className="flex flex-wrap items-center gap-3">
                             <div className="text-slate-500">Hiển thị <span className="font-semibold text-mint-600">{profiles.length}</span> kết quả</div>
                             <button
+                                onClick={toggleCompareMode}
+                                className={`px-4 py-2 rounded-xl border font-semibold transition-all ${compareMode ? 'bg-mint-300 text-slate-900 border-mint-400 ring-2 ring-mint-200 shadow-lg shadow-mint-200' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'}`}
+                            >
+                                {compareMode ? 'Đang so sánh' : 'So sánh'}
+                            </button>
+                            <button
                                 onClick={openSavedDialog}
                                 className="px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50"
                             >
@@ -96,15 +155,27 @@ export default function Discover() {
                             </button>
                         </div>
                     </div>
+                    {compareMode && (
+                        <div className="mb-4 rounded-xl bg-mint-50 border border-mint-100 px-4 py-3 text-sm text-mint-700">
+                            Chế độ so sánh đang bật. Chọn 2 hồ sơ để so sánh. Bấm lại vào hồ sơ đã chọn để bỏ chọn.
+                        </div>
+                    )}
                     <div data-tour="discover-grid" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {profiles.map(u => (
-                            <ProfileCard
+                            <div
                                 key={u.id}
-                                user={u}
-                                onOpen={() => app.openProfile(u.id)}
-                                onMatch={() => app.sendMatchRequest(u.id)}
-                                calculateCompatibility={app.calculateCompatibility}
-                            />
+                                onClick={() => handleProfileCompareClick(u.id)}
+                                className={`group rounded-2xl transition-colors ${compareMode ? 'cursor-pointer hover:ring-2 hover:ring-mint-300' : ''} ${selectedCompareIds.includes(u.id) ? 'ring-2 ring-mint-500 shadow-sm shadow-mint-200/60' : ''}`}
+                            >
+                                <ProfileCard
+                                    user={u}
+                                    onOpen={() => { if (!compareMode) app.openProfile(u.id); }}
+                                    onMatch={() => { if (!compareMode) app.sendMatchRequest(u.id); }}
+                                    calculateCompatibility={app.calculateCompatibility}
+                                    disableHoverEffect={compareMode}
+                                    className={`${compareMode ? 'group-hover:bg-mint-50/60' : ''} ${selectedCompareIds.includes(u.id) ? '!bg-mint-50/70' : ''}`}
+                                />
+                            </div>
                         ))}
                     </div>
                 </main>
@@ -145,6 +216,88 @@ export default function Discover() {
                                     >
                                         Xem hồ sơ
                                     </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showCompareDialog && leftUser && rightUser && (
+                <div className="fixed inset-0 z-[75] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/45" onClick={() => setShowCompareDialog(false)}></div>
+                    <div className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl p-5 sm:p-6">
+                        <div className="flex items-center justify-between mb-5">
+                            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">So sánh hồ sơ</h2>
+                            <button className="w-9 h-9 rounded-full bg-slate-100 text-slate-600" onClick={() => setShowCompareDialog(false)}>✕</button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 mb-5">
+                            {[leftUser, rightUser].map(user => {
+                                const compatibility = Math.round(app.calculateCompatibility(user));
+                                const radius = 20;
+                                const circumference = 2 * Math.PI * radius;
+                                const percent = Math.max(0, Math.min(compatibility, 100));
+                                const dash = (percent / 100) * circumference;
+
+                                return (
+                                    <div key={user.id} className="rounded-2xl border border-slate-200 p-4 bg-slate-50">
+                                        <div className="flex items-center justify-between gap-3">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center">
+                                                    {user.avatarUrl ? (
+                                                        <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full gradient-mint text-white font-bold text-lg flex items-center justify-center">
+                                                            {(user.name || '?').trim().charAt(0).toUpperCase()}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-bold text-slate-900 text-lg">{user.name}, {user.age}</h3>
+                                                    <p className="text-sm text-slate-600">{user.job}</p>
+                                                </div>
+                                            </div>
+                                            <div className="relative w-12 h-12">
+                                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 48 48">
+                                                    <circle cx="24" cy="24" r="20" stroke="#e2e8f0" strokeWidth="4" fill="none" />
+                                                    <circle
+                                                        cx="24"
+                                                        cy="24"
+                                                        r="20"
+                                                        stroke="#00CBA9"
+                                                        strokeWidth="4"
+                                                        fill="none"
+                                                        strokeDasharray={`${circumference} ${circumference}`}
+                                                        strokeDashoffset={`${circumference - dash}`}
+                                                        strokeLinecap="round"
+                                                    />
+                                                </svg>
+                                                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-mint-600">{compatibility}%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+
+                        <div className="space-y-3">
+                            {[
+                                { label: 'Khu vực', left: leftUser.districtName, right: rightUser.districtName },
+                                { label: 'Khoảng giá', left: `${leftUser.budgetMin}-${leftUser.budgetMax} triệu`, right: `${rightUser.budgetMin}-${rightUser.budgetMax} triệu` },
+                                { label: 'Giờ ngủ', left: formatLifestyle(leftUser, 'sleep'), right: formatLifestyle(rightUser, 'sleep') },
+                                { label: 'Tính cách xã hội', left: formatLifestyle(leftUser, 'social'), right: formatLifestyle(rightUser, 'social') },
+                                { label: 'Mức độ sạch sẽ', left: formatLifestyle(leftUser, 'clean'), right: formatLifestyle(rightUser, 'clean') },
+                                { label: 'Thú cưng', left: formatLifestyle(leftUser, 'pets'), right: formatLifestyle(rightUser, 'pets') },
+                                { label: 'Hút thuốc', left: formatLifestyle(leftUser, 'smoking'), right: formatLifestyle(rightUser, 'smoking') },
+                                { label: 'Mức độ ồn ào', left: formatLifestyle(leftUser, 'noise'), right: formatLifestyle(rightUser, 'noise') },
+                                { label: 'Tiếp khách tại nhà', left: formatLifestyle(leftUser, 'guests'), right: formatLifestyle(rightUser, 'guests') },
+                                { label: 'Đánh giá', left: `${leftUser.avgRating} ★`, right: `${rightUser.avgRating} ★` }
+                            ].map(item => (
+                                <div key={item.label} className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-xl border border-slate-200 p-3">
+                                    <div className="font-medium text-slate-700 text-left">{item.left}</div>
+                                    <div className="text-xs sm:text-sm text-slate-500 px-2 py-1 bg-slate-100 rounded-full">{item.label}</div>
+                                    <div className="font-medium text-slate-700 text-right">{item.right}</div>
                                 </div>
                             ))}
                         </div>
