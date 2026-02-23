@@ -26,7 +26,7 @@ const fakeReviewSummaries = [
 
 import { useAppDataContext } from '../context/AppDataContext';
 
-export default function ProfileModal({ user, onClose = () => { }, onMatch = () => { }, calculateCompatibility = () => 0 }) {
+export default function ProfileModal({ user, onClose = () => { }, onMatch = () => { }, calculateCompatibility = () => 0, onToggleSave = () => { }, isSaved = false }) {
     if (!user) return null;
     const { currentUser } = useAppDataContext?.() || {};
     const isCurrentUser = currentUser && user.id === currentUser.id;
@@ -82,7 +82,13 @@ export default function ProfileModal({ user, onClose = () => { }, onMatch = () =
                                         <span className="text-xl sm:text-2xl font-bold">{compatibility}%</span>
                                     </div>
                                     <span className="text-xs sm:text-sm text-mint-100">Điểm phù hợp</span>
-                                    <div className="mt-2 sm:mt-3">
+                                    <div className="mt-2 sm:mt-3 flex flex-col gap-2 w-full">
+                                        <button
+                                            onClick={() => onToggleSave(user.id)}
+                                            className="w-full px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-sm sm:text-base bg-white/20 hover:bg-white/30"
+                                        >
+                                            {isSaved ? 'Đã lưu hồ sơ ✓' : 'Lưu hồ sơ'}
+                                        </button>
                                         <button onClick={() => { onMatch(user.id); onClose() }} className="btn-primary text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-sm sm:text-base">Gửi yêu cầu kết nối 💫</button>
                                     </div>
                                 </div>

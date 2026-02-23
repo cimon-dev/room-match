@@ -14,6 +14,8 @@ function ProfileModalGlobal() {
             onClose={app.closeProfile}
             onMatch={app.sendMatchRequest}
             calculateCompatibility={app.calculateCompatibility}
+            onToggleSave={app.toggleSavedProfile}
+            isSaved={app.isProfileSaved?.(app.profileModalUser.id)}
         />
     );
 }

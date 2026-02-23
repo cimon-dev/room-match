@@ -19,6 +19,7 @@ export default function useAppData(initialFilters = {}) {
     const [profileModalUser, setProfileModalUser] = useState(null)
     const [messages, setMessages] = useState([])
     const [toast, setToast] = useState({ visible: false, message: '', icon: '✓' })
+    const [savedProfileIds, setSavedProfileIds] = useState([])
 
     useEffect(() => {
         // initialize users from sample data
@@ -93,6 +94,25 @@ export default function useAppData(initialFilters = {}) {
         // Could integrate with real backend here
     }
 
+    function isProfileSaved(userId) {
+        return savedProfileIds.includes(userId)
+    }
+
+    function toggleSavedProfile(userId) {
+        const user = users.find(u => u.id === userId)
+        if (!user) return
+
+        setSavedProfileIds(prev => {
+            const exists = prev.includes(userId)
+            if (exists) {
+                showToast(`Đã bỏ lưu hồ sơ của ${user.name}`, '🗑️')
+                return prev.filter(id => id !== userId)
+            }
+            showToast(`Đã lưu hồ sơ của ${user.name}`, '💾')
+            return [...prev, userId]
+        })
+    }
+
 
     function openProfile(userId) {
         const u = users.find(x => x.id === userId)
@@ -164,6 +184,9 @@ export default function useAppData(initialFilters = {}) {
         closeProfile,
         profileModalUser,
         sendMatchRequest,
+        isProfileSaved,
+        toggleSavedProfile,
+        savedProfiles: users.filter(u => savedProfileIds.includes(u.id)),
         messages,
         sendMessage,
         toast
