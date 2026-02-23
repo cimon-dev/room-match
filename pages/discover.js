@@ -224,15 +224,15 @@ export default function Discover() {
             )}
 
             {showCompareDialog && leftUser && rightUser && (
-                <div className="fixed inset-0 z-[75] flex items-center justify-center px-4">
+                <div className="fixed inset-0 z-[75] flex items-start sm:items-center justify-center px-3 sm:px-4 py-4">
                     <div className="absolute inset-0 bg-black/45" onClick={() => setShowCompareDialog(false)}></div>
-                    <div className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl p-5 sm:p-6">
+                    <div className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6">
                         <div className="flex items-center justify-between mb-5">
                             <h2 className="text-xl sm:text-2xl font-bold text-slate-900">So sánh hồ sơ</h2>
                             <button className="w-9 h-9 rounded-full bg-slate-100 text-slate-600" onClick={() => setShowCompareDialog(false)}>✕</button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 mb-5">
+                        <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-5">
                             {[leftUser, rightUser].map(user => {
                                 const compatibility = Math.round(app.calculateCompatibility(user));
                                 const radius = 20;
@@ -241,9 +241,9 @@ export default function Discover() {
                                 const dash = (percent / 100) * circumference;
 
                                 return (
-                                    <div key={user.id} className="rounded-2xl border border-slate-200 p-4 bg-slate-50">
-                                        <div className="flex items-center justify-between gap-3">
-                                            <div className="flex items-center gap-3">
+                                    <div key={user.id} className="rounded-2xl border border-slate-200 p-3 sm:p-4 bg-slate-50 min-w-0">
+                                        <div className="hidden sm:flex items-start sm:items-center justify-between gap-2 sm:gap-3 min-w-0">
+                                            <div className="flex items-center gap-3 min-w-0">
                                                 <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center">
                                                     {user.avatarUrl ? (
                                                         <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
@@ -253,12 +253,12 @@ export default function Discover() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div>
-                                                    <h3 className="font-bold text-slate-900 text-lg">{user.name}, {user.age}</h3>
-                                                    <p className="text-sm text-slate-600">{user.job}</p>
+                                                <div className="min-w-0">
+                                                    <h3 className="font-bold text-slate-900 text-lg leading-tight break-words">{user.name}, {user.age}</h3>
+                                                    <p className="text-sm text-slate-600 break-words">{user.job}</p>
                                                 </div>
                                             </div>
-                                            <div className="relative w-12 h-12">
+                                            <div className="relative w-12 h-12 shrink-0">
                                                 <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 48 48">
                                                     <circle cx="24" cy="24" r="20" stroke="#e2e8f0" strokeWidth="4" fill="none" />
                                                     <circle
@@ -276,6 +276,21 @@ export default function Discover() {
                                                 <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-mint-600">{compatibility}%</span>
                                             </div>
                                         </div>
+                                        <div className="sm:hidden flex flex-col items-center text-center gap-2">
+                                            <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center">
+                                                {user.avatarUrl ? (
+                                                    <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <div className="w-full h-full gradient-mint text-white font-bold text-lg flex items-center justify-center">
+                                                        {(user.name || '?').trim().charAt(0).toUpperCase()}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="min-w-0">
+                                                <h3 className="font-bold text-slate-900 text-base leading-tight break-words">{user.name}, {user.age}</h3>
+                                                <p className="text-xs text-slate-600 break-words leading-tight">{user.job}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -283,6 +298,7 @@ export default function Discover() {
 
                         <div className="space-y-3">
                             {[
+                                { label: 'Phù hợp', left: `${Math.round(app.calculateCompatibility(leftUser))}%`, right: `${Math.round(app.calculateCompatibility(rightUser))}%`, mobileOnly: true },
                                 { label: 'Khu vực', left: leftUser.districtName, right: rightUser.districtName },
                                 { label: 'Khoảng giá', left: `${leftUser.budgetMin}-${leftUser.budgetMax} triệu`, right: `${rightUser.budgetMin}-${rightUser.budgetMax} triệu` },
                                 { label: 'Giờ ngủ', left: formatLifestyle(leftUser, 'sleep'), right: formatLifestyle(rightUser, 'sleep') },
@@ -294,10 +310,15 @@ export default function Discover() {
                                 { label: 'Tiếp khách tại nhà', left: formatLifestyle(leftUser, 'guests'), right: formatLifestyle(rightUser, 'guests') },
                                 { label: 'Đánh giá', left: `${leftUser.avgRating} ★`, right: `${rightUser.avgRating} ★` }
                             ].map(item => (
-                                <div key={item.label} className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-xl border border-slate-200 p-3">
-                                    <div className="font-medium text-slate-700 text-left">{item.left}</div>
-                                    <div className="text-xs sm:text-sm text-slate-500 px-2 py-1 bg-slate-100 rounded-full">{item.label}</div>
-                                    <div className="font-medium text-slate-700 text-right">{item.right}</div>
+                                <div key={item.label} className={`rounded-xl border border-slate-200 p-3 ${item.mobileOnly ? 'sm:hidden' : ''}`}>
+                                    <div className="mb-2 flex justify-center sm:hidden">
+                                        <div className="text-xs text-slate-500 px-2 py-1 bg-slate-100 rounded-full">{item.label}</div>
+                                    </div>
+                                    <div className="grid grid-cols-2 sm:grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3">
+                                        <div className="font-medium text-slate-700 text-left min-w-0 break-words">{item.left}</div>
+                                        <div className="hidden sm:inline-flex text-xs sm:text-sm text-slate-500 px-2 py-1 bg-slate-100 rounded-full justify-center">{item.label}</div>
+                                        <div className="font-medium text-slate-700 text-right min-w-0 break-words">{item.right}</div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
