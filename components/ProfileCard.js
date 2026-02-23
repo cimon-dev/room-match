@@ -7,7 +7,7 @@ export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibil
     const avatarInitial = (user.name || '?').trim().charAt(0).toUpperCase()
 
     return (
-        <div className={`bg-white rounded-2xl shadow-md overflow-hidden flex flex-col ${disableHoverEffect ? '' : 'card-hover'} ${className}`}>
+        <div className={`bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full ${disableHoverEffect ? '' : 'card-hover'} ${className}`}>
             <div className="p-5 flex-1 flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -59,8 +59,8 @@ export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibil
                     <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">{user.pets === 'has' ? '🐕 Có thú cưng' : user.pets === 'friendly' ? '💕 Thân thiện thú cưng' : '🚫 Không thú cưng'}</span>
                 </div>
 
-                <div className="mb-4 flex-1">
-                    <p className="text-slate-600 line-clamp-3">{user.bio}</p>
+                <div className="mb-4 h-12">
+                    <p className="text-slate-600 leading-6 line-clamp-2">{user.bio}</p>
                 </div>
             </div>
 

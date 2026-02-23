@@ -1,8 +1,8 @@
 export default function HowItWorks() {
     const steps = [
-        { title: 'Lọc thông minh', text: 'Sử dụng bộ lọc lối sống để tìm bạn cùng phòng phù hợp với thói quen, ngân sách và vị trí mong muốn.', icon: '🔍' },
-        { title: 'Kết nối & trò chuyện', text: 'Gửi yêu cầu kết bạn, ghép đôi và bắt đầu trò chuyện an toàn với bạn cùng phòng tiềm năng.', icon: '💫' },
-        { title: 'Chuyển vào vui vẻ', text: 'Hoàn tất thỏa thuận và tận hưởng cuộc sống hòa hợp với đánh giá xác thực.', icon: '🏠' }
+        { title: 'Đo độ tương thích', text: 'Lọc theo lối sống, ngân sách, khu vực và nhận gợi ý bạn cùng phòng có mức phù hợp cao.', icon: '🔍' },
+        { title: 'Kết nối an toàn', text: 'Xem hồ sơ có đánh giá xác thực, gửi yêu cầu kết nối và trò chuyện trước khi quyết định.', icon: '🛡️' },
+        { title: 'Ở ghép yên tâm', text: 'So sánh hồ sơ, thống nhất kỳ vọng sống chung và bắt đầu cuộc sống hòa hợp hơn.', icon: '🏠' }
     ]
 
     return (
@@ -10,7 +10,7 @@ export default function HowItWorks() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Cách RoomMatch hoạt động</h2>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto">Tìm bạn cùng phòng lý tưởng dễ dàng như 1-2-3</p>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto">Ưu tiên phù hợp và an toàn trong từng bước kết nối</p>
                 </div>
                 <div className="grid md:grid-cols-3 gap-8">
                     {steps.map((s, i) => (

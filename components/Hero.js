@@ -24,9 +24,9 @@ export default function Hero() {
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-mint-100 rounded-full text-mint-700 font-medium text-sm mb-6">Được tin tưởng bởi 10.000+ người</div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">Kết nối – Tìm bạn ở ghép lý tưởng tại Hà Nội</h1>
-                        <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-lg">Tìm bạn ở ghép phù hợp, an tâm và tiện lợi. Đánh giá xác thực, kết nối thật.</p>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-mint-100 rounded-full text-mint-700 font-medium text-sm mb-6">Tương thích cao • Xác thực an toàn • 10.000+ người tin dùng</div>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">Tìm bạn ở ghép tương thích cao, an toàn ngay tại Hà Nội</h1>
+                        <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-lg">RoomMatch ưu tiên ghép đôi theo lối sống và mức độ phù hợp, kết hợp hồ sơ xác thực để bạn kết nối an tâm hơn.</p>
                         <div data-tour="hero-search" className="bg-white rounded-2xl shadow-xl p-4 md:p-6 max-w-xl">
                             <div className="grid md:grid-cols-3 gap-4">
                                 <select value={district} onChange={e => setDistrict(e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
@@ -52,8 +52,8 @@ export default function Hero() {
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="w-16 h-16 rounded-2xl gradient-mint flex items-center justify-center text-white text-2xl">👥</div>
                                 <div>
-                                    <h3 className="font-bold text-slate-900">Khả năng tìm bạn cùng phòng phù hợp cao!</h3>
-                                    <p className="text-slate-500 text-sm">Lên đến 98%</p>
+                                    <h3 className="font-bold text-slate-900">Ghép đôi theo độ tương thích + mức độ an toàn</h3>
+                                    <p className="text-slate-500 text-sm">Tương thích đến 98% • Hồ sơ đánh giá xác thực</p>
                                 </div>
                             </div>
                             <button

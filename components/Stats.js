@@ -1,9 +1,9 @@
 export default function Stats() {
     const stats = [
         { value: '10K+', label: 'Người dùng hoạt động' },
-        { value: '5K+', label: 'Ghép đôi thành công' },
-        { value: '12', label: 'Quận tại Hà Nội' },
-        { value: '4.8⭐', label: 'Đánh giá trung bình' }
+        { value: '5K+', label: 'Kết nối tương thích thành công' },
+        { value: '98%', label: 'Mức phù hợp tối đa theo hồ sơ' },
+        { value: '4.8⭐', label: 'Độ tin cậy từ đánh giá xác thực' }
     ]
 
     return (
