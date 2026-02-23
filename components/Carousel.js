@@ -21,7 +21,7 @@ export default function Carousel({ users = [], onOpenProfile = () => { } }) {
     }, []);
 
     return (
-        <section className="py-8 bg-white">
+        <section data-tour="top-carousel" className="py-8 bg-white">
             <div className="w-full">
                 <div className="overflow-hidden w-full">
                     <div

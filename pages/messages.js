@@ -58,10 +58,10 @@ export default function Messages() {
     }, [activeChatUserId, chatMessages.length]);
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div data-tour="messages-page" className="min-h-screen bg-slate-50">
             <NavBar />
             <main className="pt-16">
-                <div className="flex h-[calc(100vh-5rem)]">
+                <div data-tour="messages-layout" className="flex h-[calc(100vh-5rem)]">
                     <div className="md:hidden w-full bg-white">
                         {!isMobileDetailView ? (
                             <div className="h-full flex flex-col">

@@ -36,7 +36,7 @@ export default function NavBar() {
     }
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <nav data-tour="nav-main" className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
             <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
                 <div className="flex justify-between items-center h-14 sm:h-16 px-1 sm:px-0">
                     {/* Logo */}
@@ -63,8 +63,8 @@ export default function NavBar() {
                     {/* Main menu for desktop */}
                     <div className="hidden md:flex items-center gap-4 sm:gap-6">
                         <Link href="/" className="text-slate-600 hover:text-mint-500 whitespace-nowrap">Trang chủ</Link>
-                        <Link href="/discover" className="text-slate-600 hover:text-mint-500 whitespace-nowrap">Khám phá</Link>
-                        <Link href="/messages" className="text-slate-600 hover:text-mint-500 whitespace-nowrap">Tin nhắn</Link>
+                        <Link href="/discover" data-tour="nav-discover" className="text-slate-600 hover:text-mint-500 whitespace-nowrap">Khám phá</Link>
+                        <Link href="/messages" data-tour="nav-messages" className="text-slate-600 hover:text-mint-500 whitespace-nowrap">Tin nhắn</Link>
                         <div className="flex items-center gap-2 sm:gap-3 relative">
                             <button
                                 className="w-8 h-8 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center text-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-mint-400"
@@ -94,10 +94,12 @@ export default function NavBar() {
                                 onClick={() => { router.push('/').then(() => setShowMobileMenu(false)); }}
                             >Trang chủ</button>
                             <button
+                                data-tour="nav-discover"
                                 className="w-full text-left text-slate-600 hover:text-mint-500 py-2 rounded"
                                 onClick={() => { router.push('/discover').then(() => setShowMobileMenu(false)); }}
                             >Khám phá</button>
                             <button
+                                data-tour="nav-messages"
                                 className="w-full text-left text-slate-600 hover:text-mint-500 py-2 rounded"
                                 onClick={() => { router.push('/messages').then(() => setShowMobileMenu(false)); }}
                             >Tin nhắn</button>

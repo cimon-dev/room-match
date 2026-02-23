@@ -12,7 +12,7 @@ export default function Discover() {
     const [showFilters, setShowFilters] = useState(false);
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div data-tour="discover-page" className="min-h-screen bg-slate-50">
             <NavBar />
             <div className="pt-16 lg:flex">
                 {/* Sidebar for desktop, offcanvas for mobile */}
@@ -55,11 +55,11 @@ export default function Discover() {
                     </div>
                 </aside>
                 <main className="flex-1 p-4 sm:p-6 lg:ml-[320px]">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2">
+                    <div data-tour="discover-header" className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2">
                         <h1 className="text-2xl font-bold">Khám phá</h1>
                         <div className="text-slate-500">Hiển thị <span className="font-semibold text-mint-600">{profiles.length}</span> kết quả</div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div data-tour="discover-grid" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {profiles.map(u => (
                             <ProfileCard
                                 key={u.id}

@@ -7,6 +7,11 @@ export default function Hero() {
     const [district, setDistrict] = useState('')
     const [budget, setBudget] = useState('')
 
+    function openGuide() {
+        if (typeof window === 'undefined') return
+        window.dispatchEvent(new Event('roommatch:start-tour'))
+    }
+
     function search() {
         const params = new URLSearchParams()
         if (district) params.set('district', district)
@@ -22,7 +27,7 @@ export default function Hero() {
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-mint-100 rounded-full text-mint-700 font-medium text-sm mb-6">Được tin tưởng bởi 10.000+ người</div>
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">Kết nối – Tìm bạn ở ghép lý tưởng tại Hà Nội</h1>
                         <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-lg">Tìm bạn ở ghép phù hợp, an tâm và tiện lợi. Đánh giá xác thực, kết nối thật.</p>
-                        <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 max-w-xl">
+                        <div data-tour="hero-search" className="bg-white rounded-2xl shadow-xl p-4 md:p-6 max-w-xl">
                             <div className="grid md:grid-cols-3 gap-4">
                                 <select value={district} onChange={e => setDistrict(e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
                                     <option value="">Tất cả quận</option>
@@ -51,6 +56,13 @@ export default function Hero() {
                                     <p className="text-slate-500 text-sm">Lên đến 98%</p>
                                 </div>
                             </div>
+                            <button
+                                data-tour="hero-guide-button"
+                                onClick={openGuide}
+                                className="btn-primary text-white font-semibold py-3 px-5 rounded-xl"
+                            >
+                                Click vào đây để tìm hiểu về RoomMatch
+                            </button>
                         </div>
                     </div>
                 </div>

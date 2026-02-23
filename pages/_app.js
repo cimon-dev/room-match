@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import Head from 'next/head';
 import { AppDataProvider, useAppDataContext } from '../context/AppDataContext';
 import ProfileModal from '../components/ProfileModal';
+import AppTour from '../components/AppTour';
 
 function ProfileModalGlobal() {
     const app = useAppDataContext?.() || {};
@@ -33,6 +34,7 @@ export default function App({ Component, pageProps }) {
             <AppDataProvider>
                 <Component {...pageProps} />
                 <ProfileModalGlobal />
+                <AppTour />
             </AppDataProvider>
         </>
     );
