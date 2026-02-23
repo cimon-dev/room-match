@@ -4,45 +4,74 @@ import Joyride, { STATUS } from 'react-joyride';
 
 const STORAGE_KEY = 'roommatch_basic_tour_seen_v1';
 
+const HOME_STEPS_DESKTOP = [
+    {
+        target: '[data-tour="nav-main"]',
+        title: 'Thanh điều hướng',
+        content: 'Đây là menu chính để đi nhanh giữa Trang chủ, Khám phá và Tin nhắn.',
+        placement: 'bottom'
+    },
+    {
+        target: '[data-tour="nav-discover"]',
+        title: 'Trang Khám phá',
+        content: 'Bấm vào Khám phá để xem danh sách hồ sơ, lọc theo nhu cầu và tìm người phù hợp.',
+        placement: 'bottom'
+    },
+    {
+        target: '[data-tour="nav-messages"]',
+        title: 'Trang Tin nhắn',
+        content: 'Bấm vào Tin nhắn để mở hội thoại với các kết nối và trao đổi trực tiếp.',
+        placement: 'bottom'
+    },
+    {
+        target: '[data-tour="hero-search"]',
+        title: 'Tìm nhanh',
+        content: 'Chọn quận và ngân sách để lọc nhanh rồi bấm Tìm kiếm.',
+        placement: 'bottom'
+    },
+    {
+        target: '[data-tour="top-carousel"]',
+        title: 'Gợi ý nổi bật',
+        content: 'Các hồ sơ nổi bật hiển thị ở đây, bấm vào thẻ để xem chi tiết.',
+        placement: 'top'
+    },
+    {
+        target: '[data-tour="how-it-works"]',
+        title: 'Quy trình sử dụng',
+        content: 'Xem 3 bước cốt lõi để bắt đầu kết nối bạn cùng phòng.',
+        placement: 'top'
+    }
+];
+
+const HOME_STEPS_MOBILE = [
+    {
+        target: '[data-tour="nav-mobile-toggle"]',
+        title: 'Mở menu',
+        content: 'Bấm nút 3 gạch để mở menu điều hướng.',
+        placement: 'bottom'
+    },
+    {
+        target: '[data-tour="hero-search"]',
+        title: 'Tìm nhanh',
+        content: 'Chọn quận và ngân sách để lọc nhanh rồi bấm Tìm kiếm.',
+        placement: 'bottom'
+    },
+    {
+        target: '[data-tour="top-carousel"]',
+        title: 'Gợi ý nổi bật',
+        content: 'Các hồ sơ nổi bật hiển thị ở đây, bấm vào thẻ để xem chi tiết.',
+        placement: 'top'
+    },
+    {
+        target: '[data-tour="how-it-works"]',
+        title: 'Quy trình sử dụng',
+        content: 'Xem 3 bước cốt lõi để bắt đầu kết nối bạn cùng phòng.',
+        placement: 'top'
+    }
+];
+
 const STEPS_BY_ROUTE = {
-    '/': [
-        {
-            target: '[data-tour="nav-main"]',
-            title: 'Thanh điều hướng',
-            content: 'Đây là menu chính để đi nhanh giữa Trang chủ, Khám phá và Tin nhắn.',
-            placement: 'bottom'
-        },
-        {
-            target: '[data-tour="nav-discover"]',
-            title: 'Trang Khám phá',
-            content: 'Bấm vào Khám phá để xem danh sách hồ sơ, lọc theo nhu cầu và tìm người phù hợp.',
-            placement: 'bottom'
-        },
-        {
-            target: '[data-tour="nav-messages"]',
-            title: 'Trang Tin nhắn',
-            content: 'Bấm vào Tin nhắn để mở hội thoại với các kết nối và trao đổi trực tiếp.',
-            placement: 'bottom'
-        },
-        {
-            target: '[data-tour="hero-search"]',
-            title: 'Tìm nhanh',
-            content: 'Chọn quận và ngân sách để lọc nhanh rồi bấm Tìm kiếm.',
-            placement: 'bottom'
-        },
-        {
-            target: '[data-tour="top-carousel"]',
-            title: 'Gợi ý nổi bật',
-            content: 'Các hồ sơ nổi bật hiển thị ở đây, bấm vào thẻ để xem chi tiết.',
-            placement: 'top'
-        },
-        {
-            target: '[data-tour="how-it-works"]',
-            title: 'Quy trình sử dụng',
-            content: 'Xem 3 bước cốt lõi để bắt đầu kết nối bạn cùng phòng.',
-            placement: 'top'
-        }
-    ],
+    '/': HOME_STEPS_DESKTOP,
     '/discover': [
         {
             target: '[data-tour="discover-page"]',
@@ -83,14 +112,26 @@ export default function AppTour() {
     const router = useRouter();
     const [mounted, setMounted] = useState(false);
     const [run, setRun] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     const steps = useMemo(
-        () => (STEPS_BY_ROUTE[router.pathname] || []).map(step => ({ ...step, disableBeacon: true })),
-        [router.pathname]
+        () => {
+            const baseSteps = router.pathname === '/' ? (isMobile ? HOME_STEPS_MOBILE : HOME_STEPS_DESKTOP) : (STEPS_BY_ROUTE[router.pathname] || []);
+            return baseSteps.map(step => ({ ...step, disableBeacon: true }));
+        },
+        [router.pathname, isMobile]
     );
 
     useEffect(() => {
         setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const updateViewport = () => setIsMobile(window.innerWidth < 768);
+        updateViewport();
+        window.addEventListener('resize', updateViewport);
+        return () => window.removeEventListener('resize', updateViewport);
     }, []);
 
     useEffect(() => {

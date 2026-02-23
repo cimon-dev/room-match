@@ -52,6 +52,7 @@ export default function NavBar() {
                     </div>
                     {/* Hamburger menu button for mobile */}
                     <button
+                        data-tour="nav-mobile-toggle"
                         className="md:hidden flex items-center px-2 py-2 rounded focus:outline-none focus:ring-2 focus:ring-mint-400"
                         onClick={() => setShowMobileMenu(v => !v)}
                         aria-label="Mở menu"
