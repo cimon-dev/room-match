@@ -44,17 +44,23 @@ export default function ProfileModal({ user, onClose = () => { }, onMatch = () =
                     <div className="gradient-mint p-5 sm:p-8 text-white rounded-t-2xl sm:rounded-t-3xl">
                         <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
                             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl overflow-hidden bg-white/20 flex items-center justify-center">
-                                <img
-                                    src={isCurrentUser ? (currentUser?.avatarUrl || '/images/boy-10.jpg') : user.avatarUrl}
-                                    alt={user.name}
-                                    className="w-full h-full object-cover"
-                                    onError={e => {
-                                        e.target.onerror = null;
-                                        e.target.src = isCurrentUser
-                                            ? '/images/boy-10.jpg'
-                                            : (user.gender === 'male' ? '/images/boy-01.jpg' : '/images/girl-01.jpg');
-                                    }}
-                                />
+                                {(isCurrentUser ? currentUser?.avatarUrl : user.avatarUrl) ? (
+                                    <img
+                                        src={isCurrentUser ? (currentUser?.avatarUrl || '/images/boy-10.jpg') : user.avatarUrl}
+                                        alt={user.name}
+                                        className="w-full h-full object-cover"
+                                        onError={e => {
+                                            e.target.onerror = null;
+                                            e.target.src = isCurrentUser
+                                                ? '/images/boy-10.jpg'
+                                                : (user.gender === 'male' ? '/images/boy-01.jpg' : '/images/girl-01.jpg');
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="w-full h-full gradient-mint text-white font-bold text-2xl flex items-center justify-center">
+                                        {(user.name || '?').trim().charAt(0).toUpperCase()}
+                                    </div>
+                                )}
                             </div>
                             <div className="text-center md:text-left">
                                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">

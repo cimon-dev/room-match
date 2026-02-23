@@ -38,12 +38,18 @@ export default function Carousel({ users = [], onOpenProfile = () => { } }) {
                             >
                                 <div className="flex items-center gap-4 mb-4 p-5 pb-0">
                                     <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center">
-                                        <img
-                                            src={u.avatarUrl}
-                                            alt={u.name}
-                                            className="w-full h-full object-cover"
-                                            onError={e => { e.target.onerror = null; e.target.src = u.gender === 'male' ? 'https://randomuser.me/api/portraits/men/1.jpg' : 'https://randomuser.me/api/portraits/women/1.jpg'; }}
-                                        />
+                                        {u.avatarUrl ? (
+                                            <img
+                                                src={u.avatarUrl}
+                                                alt={u.name}
+                                                className="w-full h-full object-cover"
+                                                onError={e => { e.target.onerror = null; e.target.src = u.gender === 'male' ? 'https://randomuser.me/api/portraits/men/1.jpg' : 'https://randomuser.me/api/portraits/women/1.jpg'; }}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full gradient-mint text-white font-bold text-lg flex items-center justify-center">
+                                                {(u.name || '?').trim().charAt(0).toUpperCase()}
+                                            </div>
+                                        )}
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900">{u.name}, {u.age}</h3>

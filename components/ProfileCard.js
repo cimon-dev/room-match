@@ -4,7 +4,7 @@ export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibil
     const circumference = 2 * Math.PI * radius
     const percent = Math.max(0, Math.min(compatibility, 100))
     const dash = (percent / 100) * circumference
-    const fallbackAvatarSrc = user.gender === 'male' ? '/images/boy-01.jpg' : '/images/girl-01.jpg'
+    const avatarInitial = (user.name || '?').trim().charAt(0).toUpperCase()
 
     return (
         <div className="bg-white rounded-2xl shadow-md overflow-hidden card-hover flex flex-col">
@@ -12,12 +12,17 @@ export default function ProfileCard({ user, onOpen, onMatch, calculateCompatibil
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                         <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center">
-                            <img
-                                src={user.avatarUrl}
-                                alt={user.name}
-                                className="w-full h-full object-cover"
-                                onError={e => { e.target.onerror = null; e.target.src = fallbackAvatarSrc; }}
-                            />
+                            {user.avatarUrl ? (
+                                <img
+                                    src={user.avatarUrl}
+                                    alt={user.name}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full gradient-mint text-white font-bold text-lg flex items-center justify-center">
+                                    {avatarInitial}
+                                </div>
+                            )}
                         </div>
                         <div>
                             <h3 className="font-bold text-slate-900">{user.name}, {user.age}</h3>

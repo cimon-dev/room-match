@@ -59,10 +59,37 @@ export default function FiltersSidebar({ app }) {
             </div>
 
             <div className="mb-6">
-                <h3 className="text-sm font-semibold text-slate-700 mb-3">Thời gian ngủ</h3>
+                <h3 className="text-sm font-semibold text-slate-700 mb-3">Giờ ngủ</h3>
                 <div className="flex flex-wrap gap-2">
                     <button onClick={() => toggleChip('sleep', 'early')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.sleep === 'early' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🌅 Dậy sớm</button>
                     <button onClick={() => toggleChip('sleep', 'night')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.sleep === 'night' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🦉 Cú đêm</button>
+                </div>
+            </div>
+
+            <div className="mb-6">
+                <h3 className="text-sm font-semibold text-slate-700 mb-3">Hút thuốc</h3>
+                <div className="flex flex-wrap gap-2">
+                    <button onClick={() => toggleChip('smoking', 'no')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.smoking === 'no' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🚭 Không hút</button>
+                    <button onClick={() => toggleChip('smoking', 'occasionally')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.smoking === 'occasionally' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>😶‍🌫️ Thỉnh thoảng</button>
+                    <button onClick={() => toggleChip('smoking', 'yes')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.smoking === 'yes' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🚬 Có hút</button>
+                </div>
+            </div>
+
+            <div className="mb-6">
+                <h3 className="text-sm font-semibold text-slate-700 mb-3">Mức độ ồn ào</h3>
+                <div className="flex flex-wrap gap-2">
+                    <button onClick={() => toggleChip('noise', 'quiet')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.noise === 'quiet' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🤫 Yên tĩnh</button>
+                    <button onClick={() => toggleChip('noise', 'normal')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.noise === 'normal' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🙂 Bình thường</button>
+                    <button onClick={() => toggleChip('noise', 'lively')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.noise === 'lively' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🎉 Sôi động</button>
+                </div>
+            </div>
+
+            <div className="mb-6">
+                <h3 className="text-sm font-semibold text-slate-700 mb-3">Tiếp khách tại nhà</h3>
+                <div className="flex flex-wrap gap-2">
+                    <button onClick={() => toggleChip('guests', 'rare')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.guests === 'rare' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🏡 Hiếm khi</button>
+                    <button onClick={() => toggleChip('guests', 'sometimes')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.guests === 'sometimes' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🫖 Thỉnh thoảng</button>
+                    <button onClick={() => toggleChip('guests', 'often')} className={`filter-chip px-4 py-2 rounded-full ${app.activeFilters.guests === 'often' ? 'filter-chip active' : 'bg-slate-100 text-slate-600'}`}>🥳 Thường xuyên</button>
                 </div>
             </div>
 

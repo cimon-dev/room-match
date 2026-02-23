@@ -4,7 +4,17 @@ import { users as sampleUsers } from '../data/sampleUsers'
 export default function useAppData(initialFilters = {}) {
     const [users, setUsers] = useState([])
     const [currentUserId] = useState(1)
-    const [activeFilters, setActiveFilters] = useState({ districts: [], budget: '', sleep: null, social: null, clean: null, pets: null })
+    const [activeFilters, setActiveFilters] = useState({
+        districts: [],
+        budget: '',
+        sleep: null,
+        social: null,
+        clean: null,
+        pets: null,
+        smoking: null,
+        noise: null,
+        guests: null
+    })
     const [sortBy, setSortBy] = useState('compatibility')
     const [profileModalUser, setProfileModalUser] = useState(null)
     const [messages, setMessages] = useState([])
@@ -12,7 +22,20 @@ export default function useAppData(initialFilters = {}) {
 
     useEffect(() => {
         // initialize users from sample data
-        setUsers(sampleUsers)
+        const normalizedUsers = sampleUsers.map((user, index) => {
+            const seed = user.id ?? index + 1
+            const smokingFallback = ['no', 'occasionally', 'yes'][seed % 3]
+            const noiseFallback = ['quiet', 'normal', 'lively'][Math.floor(seed / 2) % 3]
+            const guestsFallback = ['rare', 'sometimes', 'often'][Math.floor(seed / 3) % 3]
+
+            return {
+                ...user,
+                smoking: user.smoking ?? smokingFallback,
+                noise: user.noise ?? noiseFallback,
+                guests: user.guests ?? guestsFallback
+            }
+        })
+        setUsers(normalizedUsers)
         // apply initial filters from caller (e.g., query params)
         if (initialFilters) {
             setActiveFilters(prev => ({ ...prev, ...initialFilters }))
@@ -36,12 +59,33 @@ export default function useAppData(initialFilters = {}) {
         return Math.min(score, 98)
     }
 
-    function applyFilters({ districts, budget, sleep, social, clean, pets } = {}) {
-        setActiveFilters(prev => ({ ...prev, districts: districts ?? prev.districts, budget: budget ?? prev.budget, sleep: sleep ?? prev.sleep, social: social ?? prev.social, clean: clean ?? prev.clean, pets: pets ?? prev.pets }))
+    function applyFilters({ districts, budget, sleep, social, clean, pets, smoking, noise, guests } = {}) {
+        setActiveFilters(prev => ({
+            ...prev,
+            districts: districts ?? prev.districts,
+            budget: budget ?? prev.budget,
+            sleep: sleep ?? prev.sleep,
+            social: social ?? prev.social,
+            clean: clean ?? prev.clean,
+            pets: pets ?? prev.pets,
+            smoking: smoking ?? prev.smoking,
+            noise: noise ?? prev.noise,
+            guests: guests ?? prev.guests
+        }))
     }
 
     function resetFilters() {
-        setActiveFilters({ districts: [], budget: '', sleep: null, social: null, clean: null, pets: null })
+        setActiveFilters({
+            districts: [],
+            budget: '',
+            sleep: null,
+            social: null,
+            clean: null,
+            pets: null,
+            smoking: null,
+            noise: null,
+            guests: null
+        })
     }
 
     function sendMatchRequest(targetId) {
@@ -77,6 +121,9 @@ export default function useAppData(initialFilters = {}) {
         if (activeFilters.social) filtered = filtered.filter(u => u.social === activeFilters.social)
         if (activeFilters.clean) filtered = filtered.filter(u => u.clean === activeFilters.clean)
         if (activeFilters.pets) filtered = filtered.filter(u => u.pets === activeFilters.pets)
+        if (activeFilters.smoking) filtered = filtered.filter(u => u.smoking === activeFilters.smoking)
+        if (activeFilters.noise) filtered = filtered.filter(u => u.noise === activeFilters.noise)
+        if (activeFilters.guests) filtered = filtered.filter(u => u.guests === activeFilters.guests)
 
         switch (sortBy) {
             case 'rating':
